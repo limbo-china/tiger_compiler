@@ -1,0 +1,8 @@
+ Eseq(
+  Move(
+   Mem(
+    BinopExp(PLUS,
+     Temp(101),
+     Const(-4))),
+   Const(0)),
+  Const(0))

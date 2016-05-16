@@ -1,0 +1,25 @@
+ letExp(
+  decList(
+   typeDec(
+rectype,
+    tyfieldTy(
+     tyfieldList(
+      tyfield(name,
+       string,
+       ,
+      tyfieldList(
+       tyfield(id,
+        int,
+        ,
+       tyfieldList())))),
+   decList(
+    varDec(b,
+     rectype,
+     nilExp(),
+     ,
+    decList())),
+  expList(
+   assignExp(
+    simpleVar(b),
+    nilExp()),
+   expList()))
