@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Type%20Decl">Type Decl</a>,
+Next:<a rel=next href="Expect-Decl.html#Expect%20Decl">Expect Decl</a>,
+Previous:<a rel=previous href="Union-Decl.html#Union%20Decl">Union Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>Nonterminal Symbols</h4>
+
+<p>When you use <code>%union</code> to specify multiple value types, you must
+declare the value type of each nonterminal symbol for which values are
+used.  This is done with a <code>%type</code> declaration, like this:
+
+<br><pre>%type &lt;<var>type</var>&gt; <var>nonterminal</var><small>...</small>
+</pre>
+
+<p>Here <var>nonterminal</var> is the name of a nonterminal symbol, and <var>type</var>
+is the name given in the <code>%union</code> to the alternative that you want
+(see <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>).  You can give any number of nonterminal symbols in
+the same <code>%type</code> declaration, if they have the same value type.  Use
+spaces to separate the symbol names.
+
+</body></html>
+

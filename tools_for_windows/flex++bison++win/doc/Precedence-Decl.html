@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Precedence%20Decl">Precedence Decl</a>,
+Next:<a rel=next href="Union-Decl.html#Union%20Decl">Union Decl</a>,
+Previous:<a rel=previous href="Token-Decl.html#Token%20Decl">Token Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>Operator Precedence</h4>
+
+<p>Use the <code>%left</code>, <code>%right</code> or <code>%nonassoc</code> declaration to
+declare a token and specify its precedence and associativity, all at
+once.  These are called <dfn>precedence declarations</dfn>. 
+See <a href="Precedence.html#Precedence">Operator Precedence</a>, for general information on operator precedence.
+
+<p>The syntax of a precedence declaration is the same as that of
+<code>%token</code>: either
+
+<br><pre>%left <var>symbols</var><small>...</small>
+</pre>
+
+<p>or
+
+<br><pre>%left &lt;<var>type</var>&gt; <var>symbols</var><small>...</small>
+</pre>
+
+<p>And indeed any of these declarations serves the purposes of <code>%token</code>. 
+But in addition, they specify the associativity and relative precedence for
+all the <var>symbols</var>:
+
+<ul>
+<li>The associativity of an operator <var>op</var> determines how repeated uses
+of the operator nest: whether <code><var>x</var> <var>op</var> <var>y</var> <var>op</var>
+<var>z</var></code> is parsed by grouping <var>x</var> with <var>y</var> first or by
+grouping <var>y</var> with <var>z</var> first.  <code>%left</code> specifies
+left-associativity (grouping <var>x</var> with <var>y</var> first) and
+<code>%right</code> specifies right-associativity (grouping <var>y</var> with
+<var>z</var> first).  <code>%nonassoc</code> specifies no associativity, which
+means that <code><var>x</var> <var>op</var> <var>y</var> <var>op</var> <var>z</var></code> is
+considered a syntax error.
+
+<li>The precedence of an operator determines how it nests with other operators. 
+All the tokens declared in a single precedence declaration have equal
+precedence and nest together according to their associativity. 
+When two tokens declared in different precedence declarations associate,
+the one declared later has the higher precedence and is grouped first. 
+</ul>
+
+</body></html>
+

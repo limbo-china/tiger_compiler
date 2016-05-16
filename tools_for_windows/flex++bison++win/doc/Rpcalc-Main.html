@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Main">Rpcalc Main</a>,
+Next:<a rel=next href="Rpcalc-Error.html#Rpcalc%20Error">Rpcalc Error</a>,
+Previous:<a rel=previous href="Rpcalc-Lexer.html#Rpcalc%20Lexer">Rpcalc Lexer</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>The Controlling Function</h4>
+
+<p>In keeping with the spirit of this example, the controlling function is
+kept to the bare minimum.  The only requirement is that it call
+<code>yyparse</code> to start the process of parsing.
+
+<br><pre>main ()
+{
+  yyparse ();
+}
+</pre>
+
+</body></html>
+

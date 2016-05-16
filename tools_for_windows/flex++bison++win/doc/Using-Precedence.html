@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Using%20Precedence">Using Precedence</a>,
+Next:<a rel=next href="Precedence-Examples.html#Precedence%20Examples">Precedence Examples</a>,
+Previous:<a rel=previous href="Why-Precedence.html#Why%20Precedence">Why Precedence</a>,
+Up:<a rel=up href="Precedence.html#Precedence">Precedence</a>
+<hr><br>
+
+<h4>Specifying Operator Precedence</h4>
+
+<p>Bison allows you to specify these choices with the operator precedence
+declarations <code>%left</code> and <code>%right</code>.  Each such declaration
+contains a list of tokens, which are operators whose precedence and
+associativity is being declared.  The <code>%left</code> declaration makes all
+those operators left-associative and the <code>%right</code> declaration makes
+them right-associative.  A third alternative is <code>%nonassoc</code>, which
+declares that it is a syntax error to find the same operator twice "in a
+row".
+
+<p>The relative precedence of different operators is controlled by the
+order in which they are declared.  The first <code>%left</code> or
+<code>%right</code> declaration in the file declares the operators whose
+precedence is lowest, the next such declaration declares the operators
+whose precedence is a little higher, and so on.
+
+</body></html>
+

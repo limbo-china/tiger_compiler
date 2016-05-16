@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Interface">Interface</a>,
+Next:<a rel=next href="Algorithm.html#Algorithm">Algorithm</a>,
+Previous:<a rel=previous href="Grammar-File.html#Grammar%20File">Grammar File</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Parser C-Language Interface</h2>
+
+<p>The Bison parser is actually a C function named <code>yyparse</code>.  Here we
+describe the interface conventions of <code>yyparse</code> and the other
+functions that it needs to use.
+
+<p>Keep in mind that the parser uses many C identifiers starting with
+<code>yy</code> and <code>YY</code> for internal purposes.  If you use such an
+identifier (aside from those in this manual) in an action or in additional
+C code in the grammar file, you are likely to run into trouble.
+
+<ul>
+<li><a href="Parser-Function.html#Parser%20Function">Parser Function</a>:    How to call <code>yyparse</code> and what it returns. 
+<li><a href="Lexical.html#Lexical">Lexical</a>:            You must supply a function <code>yylex</code>
+                        which reads tokens. 
+<li><a href="Error-Reporting.html#Error%20Reporting">Error Reporting</a>:    You must supply a function <code>yyerror</code>. 
+<li><a href="Action-Features.html#Action%20Features">Action Features</a>:    Special features for use in actions. 
+</ul>
+
+</body></html>
+

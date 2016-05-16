@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Semantic%20Values">Semantic Values</a>,
+Next:<a rel=next href="Semantic-Actions.html#Semantic%20Actions">Semantic Actions</a>,
+Previous:<a rel=previous href="Grammar-in-Bison.html#Grammar%20in%20Bison">Grammar in Bison</a>,
+Up:<a rel=up href="Concepts.html#Concepts">Concepts</a>
+<hr><br>
+
+<h3>Semantic Values</h3>
+
+<p>A formal grammar selects tokens only by their classifications: for example,
+if a rule mentions the terminal symbol `integer constant', it means that
+<em>any</em> integer constant is grammatically valid in that position.  The
+precise value of the constant is irrelevant to how to parse the input: if
+<code>x+4</code> is grammatical then <code>x+1</code> or <code>x+3989</code> is equally
+grammatical.
+
+<p>But the precise value is very important for what the input means once it is
+parsed.  A compiler is useless if it fails to distinguish between 4, 1 and
+3989 as constants in the program!  Therefore, each token in a Bison grammar
+has both a token type and a <dfn>semantic value</dfn>.  See <a href="Semantics.html#Semantics">Defining Language Semantics</a>,
+for details.
+
+<p>The token type is a terminal symbol defined in the grammar, such as
+<code>INTEGER</code>, <code>IDENTIFIER</code> or <code>','</code>.  It tells everything
+you need to know to decide where the token may validly appear and how to
+group it with other tokens.  The grammar rules know nothing about tokens
+except their types.
+
+<p>The semantic value has all the rest of the information about the
+meaning of the token, such as the value of an integer, or the name of an
+identifier.  (A token such as <code>','</code> which is just punctuation doesn't
+need to have any semantic value.)
+
+<p>For example, an input token might be classified as token type
+<code>INTEGER</code> and have the semantic value 4.  Another input token might
+have the same token type <code>INTEGER</code> but value 3989.  When a grammar
+rule says that <code>INTEGER</code> is allowed, either of these tokens is
+acceptable because each is an <code>INTEGER</code>.  When the parser accepts the
+token, it keeps track of the token's semantic value.
+
+<p>Each grouping can also have a semantic value as well as its nonterminal
+symbol.  For example, in a calculator, an expression typically has a
+semantic value that is a number.  In a compiler for a programming
+language, an expression typically has a semantic value that is a tree
+structure describing the meaning of the expression.
+
+</body></html>
+

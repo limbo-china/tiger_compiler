@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Line">Rpcalc Line</a>,
+Next:<a rel=next href="Rpcalc-Expr.html#Rpcalc%20Expr">Rpcalc Expr</a>,
+Previous:<a rel=previous href="Rpcalc-Input.html#Rpcalc%20Input">Rpcalc Input</a>,
+Up:<a rel=up href="Rpcalc-Rules.html#Rpcalc%20Rules">Rpcalc Rules</a>
+<hr><br>
+
+<h5>Explanation of <code>line</code></h5>
+
+<p>Now consider the definition of <code>line</code>:
+
+<br><pre>line:     '\n'
+        | exp '\n'  { printf ("\t%.10g\n", $1); }
+;
+</pre>
+
+<p>The first alternative is a token which is a newline character; this means
+that rpcalc accepts a blank line (and ignores it, since there is no
+action).  The second alternative is an expression followed by a newline. 
+This is the alternative that makes rpcalc useful.  The semantic value of
+the <code>exp</code> grouping is the value of <code>$1</code> because the <code>exp</code> in
+question is the first symbol in the alternative.  The action prints this
+value, which is the result of the computation the user asked for.
+
+<p>This action is unusual because it does not assign a value to <code>$$</code>.  As
+a consequence, the semantic value associated with the <code>line</code> is
+uninitialized (its value will be unpredictable).  This would be a bug if
+that value were ever used, but we don't use it: once rpcalc has printed the
+value of the user's input line, that value is no longer needed.
+
+</body></html>
+

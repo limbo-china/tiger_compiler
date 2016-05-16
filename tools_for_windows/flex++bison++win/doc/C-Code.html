@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="C%20Code">C Code</a>,
+Previous:<a rel=previous href="Grammar-Rules.html#Grammar%20Rules">Grammar Rules</a>,
+Up:<a rel=up href="Grammar-Outline.html#Grammar%20Outline">Grammar Outline</a>
+<hr><br>
+
+<h4>The Additional C Code Section</h4>
+
+<p>The <var>additional C code</var> section is copied verbatim to the end of
+the parser file, just as the <var>C declarations</var> section is copied to
+the beginning.  This is the most convenient place to put anything
+that you want to have in the parser file but which need not come before
+the definition of <code>yyparse</code>.  For example, the definitions of
+<code>yylex</code> and <code>yyerror</code> often go here.  See <a href="Interface.html#Interface">Parser C-Language Interface</a>.
+
+<p>If the last section is empty, you may omit the <code>%%</code> that separates it
+from the grammar rules.
+
+<p>The Bison parser itself contains many static variables whose names start
+with <code>yy</code> and many macros whose names start with <code>YY</code>.  It is a
+good idea to avoid using any such names (except those documented in this
+manual) in the additional C code section of the grammar file.
+
+</body></html>
+

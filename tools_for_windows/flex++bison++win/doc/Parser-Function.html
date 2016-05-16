@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Parser%20Function">Parser Function</a>,
+Next:<a rel=next href="Lexical.html#Lexical">Lexical</a>,
+Up:<a rel=up href="Interface.html#Interface">Interface</a>
+<hr><br>
+
+<h3>The Parser Function <code>yyparse</code></h3>
+
+<p>You call the function <code>yyparse</code> to cause parsing to occur.  This
+function reads tokens, executes actions, and ultimately returns when it
+encounters end-of-input or an unrecoverable syntax error.  You can also
+write an action which directs <code>yyparse</code> to return immediately without
+reading further.
+
+<p>The value returned by <code>yyparse</code> is 0 if parsing was successful (return
+is due to end-of-input).
+
+<p>The value is 1 if parsing failed (return is due to a syntax error).
+
+<p>In an action, you can cause immediate return from <code>yyparse</code> by using
+these macros:
+
+<dl>
+<dt><code>YYACCEPT</code>
+<dd>Return immediately with value 0 (to report success).
+
+<br><dt><code>YYABORT</code>
+<dd>Return immediately with value 1 (to report failure). 
+</dl>
+
+</body></html>
+

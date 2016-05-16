@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Error%20Recovery">Error Recovery</a>,
+Next:<a rel=next href="Context-Dependency.html#Context%20Dependency">Context Dependency</a>,
+Previous:<a rel=previous href="Algorithm.html#Algorithm">Algorithm</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Error Recovery</h2>
+
+<p>It is not usually acceptable to have a program terminate on a parse
+error.  For example, a compiler should recover sufficiently to parse the
+rest of the input file and check it for errors; a calculator should accept
+another expression.
+
+<p>In a simple interactive command parser where each input is one line, it may
+be sufficient to allow <code>yyparse</code> to return 1 on error and have the
+caller ignore the rest of the input line when that happens (and then call
+<code>yyparse</code> again).  But this is inadequate for a compiler, because it
+forgets all the syntactic context leading up to the error.  A syntax error
+deep within a function in the compiler input should not cause the compiler
+to treat the following line like the beginning of a source file.
+
+<p>You can define how to recover from a syntax error by writing rules to
+recognize the special token <code>error</code>.  This is a terminal symbol that
+is always defined (you need not declare it) and reserved for error
+handling.  The Bison parser generates an <code>error</code> token whenever a
+syntax error happens; if you have provided a rule to recognize this token
+in the current context, the parse can continue.
+
+<p>For example:
+
+<br><pre>stmnts:  /* empty string */
+        | stmnts '\n'
+        | stmnts exp '\n'
+        | stmnts error '\n'
+</pre>
+
+<p>The fourth rule in this example says that an error followed by a newline
+makes a valid addition to any <code>stmnts</code>.
+
+<p>What happens if a syntax error occurs in the middle of an <code>exp</code>?  The
+error recovery rule, interpreted strictly, applies to the precise sequence
+of a <code>stmnts</code>, an <code>error</code> and a newline.  If an error occurs in
+the middle of an <code>exp</code>, there will probably be some additional tokens
+and subexpressions on the stack after the last <code>stmnts</code>, and there
+will be tokens to read before the next newline.  So the rule is not
+applicable in the ordinary way.
+
+<p>But Bison can force the situation to fit the rule, by discarding part of
+the semantic context and part of the input.  First it discards states and
+objects from the stack until it gets back to a state in which the
+<code>error</code> token is acceptable.  (This means that the subexpressions
+already parsed are discarded, back to the last complete <code>stmnts</code>.)  At
+this point the <code>error</code> token can be shifted.  Then, if the old
+look-ahead token is not acceptable to be shifted next, the parser reads
+tokens and discards them until it finds a token which is acceptable.  In
+this example, Bison reads and discards input until the next newline
+so that the fourth rule can apply.
+
+<p>The choice of error rules in the grammar is a choice of strategies for
+error recovery.  A simple and useful strategy is simply to skip the rest of
+the current input line or current statement if an error is detected:
+
+<br><pre>stmnt: error ';'  /* on error, skip until ';' is read */
+</pre>
+
+<p>It is also useful to recover to the matching close-delimiter of an
+opening-delimiter that has already been parsed.  Otherwise the
+close-delimiter will probably appear to be unmatched, and generate another,
+spurious error message:
+
+<br><pre>primary:  '(' expr ')'
+        | '(' error ')'
+        <small>...</small>
+        ;
+</pre>
+
+<p>Error recovery strategies are necessarily guesses.  When they guess wrong,
+one syntax error often leads to another.  In the above example, the error
+recovery rule guesses that an error is due to bad input within one
+<code>stmnt</code>.  Suppose that instead a spurious semicolon is inserted in the
+middle of a valid <code>stmnt</code>.  After the error recovery rule recovers
+from the first error, another syntax error will be found straightaway,
+since the text following the spurious semicolon is also an invalid
+<code>stmnt</code>.
+
+<p>To prevent an outpouring of error messages, the parser will output no error
+message for another syntax error that happens shortly after the first; only
+after three consecutive input tokens have been successfully shifted will
+error messages resume.
+
+<p>Note that rules which accept the <code>error</code> token may have actions, just
+as any other rules can.
+
+<p>You can make error messages resume immediately by using the macro
+<code>yyerrok</code> in an action.  If you do this in the error rule's action, no
+error messages will be suppressed.  This macro requires no arguments;
+<code>yyerrok;</code> is a valid C statement.
+
+<p>The previous look-ahead token is reanalyzed immediately after an error.  If
+this is unacceptable, then the macro <code>yyclearin</code> may be used to clear
+this token.  Write the statement <code>yyclearin;</code> in the error rule's
+action.
+
+<p>For example, suppose that on a parse error, an error handling routine is
+called that advances the input stream to some point where parsing should
+once again commence.  The next symbol returned by the lexical scanner is
+probably correct.  The previous look-ahead token ought to be discarded
+with <code>yyclearin;</code>.
+
+<p>The macro <code>YYRECOVERING</code> stands for an expression that has the
+value 1 when the parser is recovering from a syntax error, and 0 the
+rest of the time.  A value of 1 indicates that error messages are
+currently suppressed for new syntax errors.
+
+</body></html>
+

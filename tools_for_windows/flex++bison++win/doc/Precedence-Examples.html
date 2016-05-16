@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Precedence%20Examples">Precedence Examples</a>,
+Next:<a rel=next href="How-Precedence.html#How%20Precedence">How Precedence</a>,
+Previous:<a rel=previous href="Using-Precedence.html#Using%20Precedence">Using Precedence</a>,
+Up:<a rel=up href="Precedence.html#Precedence">Precedence</a>
+<hr><br>
+
+<h4>Precedence Examples</h4>
+
+<p>In our example, we would want the following declarations:
+
+<br><pre>%left '&lt;'
+%left '-'
+%left '*'
+</pre>
+
+<p>In a more complete example, which supports other operators as well, we
+would declare them in groups of equal precedence.  For example, <code>'+'</code> is
+declared with <code>'-'</code>:
+
+<br><pre>%left '&lt;' '&gt;' '=' NE LE GE
+%left '+' '-'
+%left '*' '/'
+</pre>
+
+<p>(Here <code>NE</code> and so on stand for the operators for "not equal"
+and so on.  We assume that these tokens are more than one character long
+and therefore are represented by names, not character literals.)
+
+</body></html>
+

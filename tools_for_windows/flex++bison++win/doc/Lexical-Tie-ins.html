@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Lexical%20Tie-ins">Lexical Tie-ins</a>,
+Next:<a rel=next href="Tie-in-Recovery.html#Tie-in%20Recovery">Tie-in Recovery</a>,
+Previous:<a rel=previous href="Semantic-Tokens.html#Semantic%20Tokens">Semantic Tokens</a>,
+Up:<a rel=up href="Context-Dependency.html#Context%20Dependency">Context Dependency</a>
+<hr><br>
+
+<h3>Lexical Tie-ins</h3>
+
+<p>One way to handle context-dependency is the <dfn>lexical tie-in</dfn>: a flag
+which is set by Bison actions, whose purpose is to alter the way tokens are
+parsed.
+
+<p>For example, suppose we have a language vaguely like C, but with a special
+construct <code>hex (<var>hex-expr</var>)</code>.  After the keyword <code>hex</code> comes
+an expression in parentheses in which all integers are hexadecimal.  In
+particular, the token <code>a1b</code> must be treated as an integer rather than
+as an identifier if it appears in that context.  Here is how you can do it:
+
+<br><pre>%{
+int hexflag;
+%}
+%%
+<small>...</small>
+expr:   IDENTIFIER
+        | constant
+        | HEX '('
+                { hexflag = 1; }
+          expr ')'
+                { hexflag = 0;
+                   $$ = $4; }
+        | expr '+' expr
+                { $$ = make_sum ($1, $3); }
+        <small>...</small>
+        ;
+
+constant:
+          INTEGER
+        | STRING
+        ;
+</pre>
+
+<p>Here we assume that <code>yylex</code> looks at the value of <code>hexflag</code>; when
+it is nonzero, all integers are parsed in hexadecimal, and tokens starting
+with letters are parsed as integers if possible.
+
+<p>The declaration of <code>hexflag</code> shown in the C declarations section of
+the parser file is needed to make it accessible to the actions
+(see <a href="C-Declarations.html#C%20Declarations">The C Declarations Section</a>).  You must also write the code in <code>yylex</code>
+to obey the flag.
+
+</body></html>
+

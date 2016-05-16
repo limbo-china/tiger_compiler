@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Mfcalc%20Decl">Mfcalc Decl</a>,
+Next:<a rel=next href="Mfcalc-Rules.html#Mfcalc%20Rules">Mfcalc Rules</a>,
+Up:<a rel=up href="Multi-function-Calc.html#Multi-function%20Calc">Multi-function Calc</a>
+<hr><br>
+
+<h4>Declarations for <code>mfcalc</code></h4>
+
+<p>Here are the C and Bison declarations for the multi-function calculator.
+
+<br><pre>%{
+#include &lt;math.h&gt;  /* For math functions, cos(), sin(), etc. */
+#include "calc.h"  /* Contains definition of `symrec'        */
+%}
+%union {
+double     val;  /* For returning numbers.                   */
+symrec  *tptr;   /* For returning symbol-table pointers      */
+}
+
+%token &lt;val&gt;  NUM        /* Simple double precision number   */
+%token &lt;tptr&gt; VAR FNCT   /* Variable and Function            */
+%type  &lt;val&gt;  exp
+
+%right '='
+%left '-' '+'
+%left '*' '/'
+%left NEG     /* Negation--unary minus */
+%right '^'    /* Exponentiation        */
+
+/* Grammar follows */
+
+%%
+</pre>
+
+<p>The above grammar introduces only two new features of the Bison language. 
+These features allow semantic values to have various data types
+(see <a href="Multiple-Types.html#Multiple%20Types">More Than One Value Type</a>).
+
+<p>The <code>%union</code> declaration specifies the entire list of possible types;
+this is instead of defining <code>YYSTYPE</code>.  The allowable types are now
+double-floats (for <code>exp</code> and <code>NUM</code>) and pointers to entries in
+the symbol table.  See <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>.
+
+<p>Since values can now have various types, it is necessary to associate a
+type with each grammar symbol whose semantic value is used.  These symbols
+are <code>NUM</code>, <code>VAR</code>, <code>FNCT</code>, and <code>exp</code>.  Their
+declarations are augmented with information about their data type (placed
+between angle brackets).
+
+<p>The Bison construct <code>%type</code> is used for declaring nonterminal symbols,
+just as <code>%token</code> is used for declaring token types.  We have not used
+<code>%type</code> before because nonterminal symbols are normally declared
+implicitly by the rules that define them.  But <code>exp</code> must be declared
+explicitly so we can specify its value type.  See <a href="Type-Decl.html#Type%20Decl">Nonterminal Symbols</a>.
+
+</body></html>
+

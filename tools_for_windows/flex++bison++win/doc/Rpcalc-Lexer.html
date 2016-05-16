@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Lexer">Rpcalc Lexer</a>,
+Next:<a rel=next href="Rpcalc-Main.html#Rpcalc%20Main">Rpcalc Main</a>,
+Previous:<a rel=previous href="Rpcalc-Rules.html#Rpcalc%20Rules">Rpcalc Rules</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>The <code>rpcalc</code> Lexical Analyzer</h4>
+
+<p>The lexical analyzer's job is low-level parsing: converting characters or
+sequences of characters into tokens.  The Bison parser gets its tokens by
+calling the lexical analyzer.  See <a href="Lexical.html#Lexical">The Lexical Analyzer Function <code>yylex</code></a>.
+
+<p>Only a simple lexical analyzer is needed for the RPN calculator.  This
+lexical analyzer skips blanks and tabs, then reads in numbers as
+<code>double</code> and returns them as <code>NUM</code> tokens.  Any other character
+that isn't part of a number is a separate token.  Note that the token-code
+for such a single-character token is the character itself.
+
+<p>The return value of the lexical analyzer function is a numeric code which
+represents a token type.  The same text used in Bison rules to stand for
+this token type is also a C expression for the numeric code for the type. 
+This works in two ways.  If the token type is a character literal, then its
+numeric code is the ASCII code for that character; you can use the same
+character literal in the lexical analyzer to express the number.  If the
+token type is an identifier, that identifier is defined by Bison as a C
+macro whose definition is the appropriate number.  In this example,
+therefore, <code>NUM</code> becomes a macro for <code>yylex</code> to use.
+
+<p>The semantic value of the token (if it has one) is stored into the global
+variable <code>yylval</code>, which is where the Bison parser will look for it. 
+(The C data type of <code>yylval</code> is <code>YYSTYPE</code>, which was defined
+at the beginning of the grammar; see <a href="Rpcalc-Decls.html#Rpcalc%20Decls">Declarations for <code>rpcalc</code></a>.)
+
+<p>A token type code of zero is returned if the end-of-file is encountered. 
+(Bison recognizes any nonpositive value as indicating the end of the
+input.)
+
+<p>Here is the code for the lexical analyzer:
+
+<br><pre>/* Lexical analyzer returns a double floating point
+   number on the stack and the token NUM, or the ASCII
+   character read if not a number.  Skips all blanks
+   and tabs, returns 0 for EOF. */
+
+#include &lt;ctype.h&gt;
+
+yylex ()
+{
+  int c;
+
+  /* skip white space  */
+  while ((c = getchar ()) == ' ' || c == '\t')
+    ;
+  /* process numbers   */
+  if (c == '.' || isdigit (c))
+    {
+      ungetc (c, stdin);
+      scanf ("%lf", &amp;yylval);
+      return NUM;
+    }
+  /* return end-of-file  */
+  if (c == EOF)
+    return 0;
+  /* return single chars */
+  return c;
+}
+</pre>
+
+</body></html>
+

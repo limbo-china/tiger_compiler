@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Token%20Positions">Token Positions</a>,
+Next:<a rel=next href="Pure-Calling.html#Pure%20Calling">Pure Calling</a>,
+Previous:<a rel=previous href="Token-Values.html#Token%20Values">Token Values</a>,
+Up:<a rel=up href="Lexical.html#Lexical">Lexical</a>
+<hr><br>
+
+<h4>Textual Positions of Tokens</h4>
+
+<p>If you are using the <code>@<var>n</var></code>-feature (see <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>) in
+actions to keep track of the textual locations of tokens and groupings,
+then you must provide this information in <code>yylex</code>.  The function
+<code>yyparse</code> expects to find the textual location of a token just parsed
+in the global variable <code>yylloc</code>.  So <code>yylex</code> must store the
+proper data in that variable.  The value of <code>yylloc</code> is a structure
+and you need only initialize the members that are going to be used by the
+actions.  The four members are called <code>first_line</code>,
+<code>first_column</code>, <code>last_line</code> and <code>last_column</code>.  Note that
+the use of this feature makes the parser noticeably slower.
+
+<p>The data type of <code>yylloc</code> has the name <code>YYLTYPE</code>.
+
+</body></html>
+

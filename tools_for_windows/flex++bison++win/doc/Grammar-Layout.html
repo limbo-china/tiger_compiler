@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Grammar%20Layout">Grammar Layout</a>,
+Previous:<a rel=previous href="Stages.html#Stages">Stages</a>,
+Up:<a rel=up href="Concepts.html#Concepts">Concepts</a>
+<hr><br>
+
+<h3>The Overall Layout of a Bison Grammar</h3>
+
+<p>The input file for the Bison utility is a <dfn>Bison grammar file</dfn>.  The
+general form of a Bison grammar file is as follows:
+
+<br><pre>%{
+<var>C declarations</var>
+%}
+
+<var>Bison declarations</var>
+
+%%
+<var>Grammar rules</var>
+%%
+<var>Additional C code</var>
+</pre>
+
+<p>The <code>%%</code>, <code>%{</code> and <code>%}</code> are punctuation that appears
+in every Bison grammar file to separate the sections.
+
+<p>The C declarations may define types and variables used in the actions. 
+You can also use preprocessor commands to define macros used there, and use
+<code>#include</code> to include header files that do any of these things.
+
+<p>The Bison declarations declare the names of the terminal and nonterminal
+symbols, and may also describe operator precedence and the data types of
+semantic values of various symbols.
+
+<p>The grammar rules define how to construct each nonterminal symbol from its
+parts.
+
+<p>The additional C code can contain any C code you want to use.  Often the
+definition of the lexical analyzer <code>yylex</code> goes here, plus subroutines
+called by the actions in the grammar rules.  In a simple program, all the
+rest of the program can go here.
+
+</body></html>
+

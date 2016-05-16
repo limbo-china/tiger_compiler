@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Look-Ahead">Look-Ahead</a>,
+Next:<a rel=next href="Shift-Reduce.html#Shift%2fReduce">Shift/Reduce</a>,
+Up:<a rel=up href="Algorithm.html#Algorithm">Algorithm</a>
+<hr><br>
+
+<h3>Look-Ahead Tokens</h3>
+
+<p>The Bison parser does <em>not</em> always reduce immediately as soon as the
+last <var>n</var> tokens and groupings match a rule.  This is because such a
+simple strategy is inadequate to handle most languages.  Instead, when a
+reduction is possible, the parser sometimes "looks ahead" at the next
+token in order to decide what to do.
+
+<p>When a token is read, it is not immediately shifted; first it becomes the
+<dfn>look-ahead token</dfn>, which is not on the stack.  Now the parser can
+perform one or more reductions of tokens and groupings on the stack, while
+the look-ahead token remains off to the side.  When no more reductions
+should take place, the look-ahead token is shifted onto the stack.  This
+does not mean that all possible reductions have been done; depending on the
+token type of the look-ahead token, some rules may choose to delay their
+application.
+
+<p>Here is a simple case where look-ahead is needed.  These three rules define
+expressions which contain binary addition operators and postfix unary
+factorial operators (<code>!</code>), and allow parentheses for grouping.
+
+<br><pre>expr:     term '+' expr
+        | term
+        ;
+
+term:     '(' expr ')'
+        | term '!'
+        | NUMBER
+        ;
+</pre>
+
+<p>Suppose that the tokens <code>1&nbsp;+&nbsp;2</code> have been read and shifted; what
+should be done?  If the following token is <code>)</code>, then the first three
+tokens must be reduced to form an <code>expr</code>.  This is the only valid
+course, because shifting the <code>)</code> would produce a sequence of symbols
+<code>term&nbsp;')'</code>, and no rule allows this.
+
+<p>If the following token is <code>!</code>, then it must be shifted immediately so
+that <code>2&nbsp;!</code> can be reduced to make a <code>term</code>.  If instead the
+parser were to reduce before shifting, <code>1&nbsp;+&nbsp;2</code> would become an
+<code>expr</code>.  It would then be impossible to shift the <code>!</code> because
+doing so would produce on the stack the sequence of symbols <code>expr
+'!'</code>.  No rule allows that sequence.
+
+<p>The current look-ahead token is stored in the variable <code>yychar</code>. 
+See <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>.
+
+</body></html>
+

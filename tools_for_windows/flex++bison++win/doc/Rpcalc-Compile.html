@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Compile">Rpcalc Compile</a>,
+Previous:<a rel=previous href="Rpcalc-Gen.html#Rpcalc%20Gen">Rpcalc Gen</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>Compiling the Parser File</h4>
+
+<p>Here is how to compile and run the parser file:
+
+<br><pre># List files in current directory.
+% ls
+rpcalc.tab.c  rpcalc.y
+
+# Compile the Bison parser.
+# <code>-lm</code> tells compiler to search math library for <code>pow</code>.
+% cc rpcalc.tab.c -lm -o rpcalc
+
+# List files again.
+% ls
+rpcalc  rpcalc.tab.c  rpcalc.y
+</pre>
+
+<p>The file <code>rpcalc</code> now contains the executable code.  Here is an
+example session using <code>rpcalc</code>.
+
+<br><pre>% rpcalc
+4 9 +
+13
+3 7 + 3 4 5 *+-
+-13
+3 7 + 3 4 5 * + - n              Note the unary minus, <code>n</code>
+13
+5 6 / 4 n +
+-3.166666667
+3 4 ^                            Exponentiation
+81
+^D                               End-of-file indicator
+%
+</pre>
+
+</body></html>
+

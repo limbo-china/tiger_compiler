@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Decl%20Summary">Decl Summary</a>,
+Previous:<a rel=previous href="Pure-Decl.html#Pure%20Decl">Pure Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>Bison Declaration Summary</h4>
+
+<p>Here is a summary of all Bison declarations:
+
+<dl>
+<dt><code>%union</code>
+<dd>Declare the collection of data types that semantic values may have
+(see <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>).
+
+<br><dt><code>%token</code>
+<dd>Declare a terminal symbol (token type name) with no precedence
+or associativity specified (see <a href="Token-Decl.html#Token%20Decl">Token Type Names</a>).
+
+<br><dt><code>%right</code>
+<dd>Declare a terminal symbol (token type name) that is right-associative
+(see <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>).
+
+<br><dt><code>%left</code>
+<dd>Declare a terminal symbol (token type name) that is left-associative
+(see <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>).
+
+<br><dt><code>%nonassoc</code>
+<dd>Declare a terminal symbol (token type name) that is nonassociative
+(using it in a way that would be associative is a syntax error)
+(see <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>).
+
+<br><dt><code>%type</code>
+<dd>Declare the type of semantic values for a nonterminal symbol
+(see <a href="Type-Decl.html#Type%20Decl">Nonterminal Symbols</a>).
+
+<br><dt><code>%start</code>
+<dd>Specify the grammar's start symbol (see <a href="Start-Decl.html#Start%20Decl">The Start-Symbol</a>).
+
+<br><dt><code>%expect</code>
+<dd>Declare the expected number of shift-reduce conflicts
+(see <a href="Expect-Decl.html#Expect%20Decl">Suppressing Conflict Warnings</a>).
+
+<br><dt><code>%pure_parser</code>
+<dd>Request a pure (reentrant) parser program (see <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>). 
+</dl>
+
+</body></html>
+

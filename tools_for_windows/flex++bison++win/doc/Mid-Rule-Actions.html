@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Mid-Rule%20Actions">Mid-Rule Actions</a>,
+Previous:<a rel=previous href="Action-Types.html#Action%20Types">Action Types</a>,
+Up:<a rel=up href="Semantics.html#Semantics">Semantics</a>
+<hr><br>
+
+<h4>Actions in Mid-Rule</h4>
+
+<p>Occasionally it is useful to put an action in the middle of a rule. 
+These actions are written just like usual end-of-rule actions, but they
+are executed before the parser even recognizes the following components.
+
+<p>A mid-rule action may refer to the components preceding it using
+<code>$<var>n</var></code>, but it may not refer to subsequent components because
+it is run before they are parsed.
+
+<p>The mid-rule action itself counts as one of the components of the rule. 
+This makes a difference when there is another action later in the same rule
+(and usually there is another at the end): you have to count the actions
+along with the symbols when working out which number <var>n</var> to use in
+<code>$<var>n</var></code>.
+
+<p>The mid-rule action can also have a semantic value.  The action can set
+its value with an assignment to <code>$$</code>, and actions later in the rule
+can refer to the value using <code>$<var>n</var></code>.  Since there is no symbol
+to name the action, there is no way to declare a data type for the value
+in advance, so you must use the <code>$&lt;<small>...</small>&gt;</code> construct to specify a
+data type each time you refer to this value.
+
+<p>There is no way to set the value of the entire rule with a mid-rule
+action, because assignments to <code>$$</code> do not have that effect.  The
+only way to set the value for the entire rule is with an ordinary action
+at the end of the rule.
+
+<p>Here is an example from a hypothetical compiler, handling a <code>let</code>
+statement that looks like <code>let (<var>variable</var>) <var>statement</var></code> and
+serves to create a variable named <var>variable</var> temporarily for the
+duration of <var>statement</var>.  To parse this construct, we must put
+<var>variable</var> into the symbol table while <var>statement</var> is parsed, then
+remove it afterward.  Here is how it is done:
+
+<br><pre>stmt:   LET '(' var ')'
+                { $&lt;context&gt;$ = push_context ();
+                  declare_variable ($3); }
+        stmt    { $$ = $6;
+                  pop_context ($&lt;context&gt;5); }
+</pre>
+
+<p>As soon as <code>let (<var>variable</var>)</code> has been recognized, the first
+action is run.  It saves a copy of the current semantic context (the
+list of accessible variables) as its semantic value, using alternative
+<code>context</code> in the data-type union.  Then it calls
+<code>declare_variable</code> to add the new variable to that list.  Once the
+first action is finished, the embedded statement <code>stmt</code> can be
+parsed.  Note that the mid-rule action is component number 5, so the
+<code>stmt</code> is component number 6.
+
+<p>After the embedded statement is parsed, its semantic value becomes the
+value of the entire <code>let</code>-statement.  Then the semantic value from the
+earlier action is used to restore the prior list of variables.  This
+removes the temporary <code>let</code>-variable from the list so that it won't
+appear to exist while the rest of the program is parsed.
+
+<p>Taking action before a rule is completely recognized often leads to
+conflicts since the parser must commit to a parse in order to execute the
+action.  For example, the following two rules, without mid-rule actions,
+can coexist in a working parser because the parser can shift the open-brace
+token and look at what follows before deciding whether there is a
+declaration or not:
+
+<br><pre>compound: '{' declarations statements '}'
+        | '{' statements '}'
+        ;
+</pre>
+
+<p>But when we add a mid-rule action as follows, the rules become nonfunctional:
+
+<br><pre>compound: { prepare_for_local_variables (); }
+          '{' declarations statements '}'
+        | '{' statements '}'
+        ;
+</pre>
+
+<p>Now the parser is forced to decide whether to run the mid-rule action
+when it has read no farther than the open-brace.  In other words, it
+must commit to using one rule or the other, without sufficient
+information to do it correctly.  (The open-brace token is what is called
+the <dfn>look-ahead</dfn> token at this time, since the parser is still
+deciding what to do about it.  See <a href="Look-Ahead.html#Look-Ahead">Look-Ahead Tokens</a>.)
+
+<p>You might think that you could correct the problem by putting identical
+actions into the two rules, like this:
+
+<br><pre>compound: { prepare_for_local_variables (); }
+          '{' declarations statements '}'
+        | { prepare_for_local_variables (); }
+          '{' statements '}'
+        ;
+</pre>
+
+<p>But this does not help, because Bison does not realize that the two actions
+are identical.  (Bison never tries to understand the C code in an action.)
+
+<p>If the grammar is such that a declaration can be distinguished from a
+statement by the first token (which is true in C), then one solution which
+does work is to put the action after the open-brace, like this:
+
+<br><pre>compound: '{' { prepare_for_local_variables (); }
+          declarations statements '}'
+        | '{' statements '}'
+        ;
+</pre>
+
+<p>Now the first token of the following declaration or statement,
+which would in any case tell Bison which rule to use, can still do so.
+
+<p>Another solution is to bury the action inside a nonterminal symbol which
+serves as a subroutine:
+
+<br><pre>subroutine: /* empty */
+          { prepare_for_local_variables (); }
+        ;
+
+compound: subroutine
+          '{' declarations statements '}'
+        | subroutine
+          '{' statements '}'
+        ;
+</pre>
+
+<p>Now Bison can execute the action in the rule for <code>subroutine</code> without
+deciding which rule for <code>compound</code> it will eventually use.  Note that
+the action is now at the end of its rule.  Any mid-rule action can be
+converted to an end-of-rule action in this way, and this is what Bison
+actually does to implement mid-rule actions.
+
+</body></html>
+

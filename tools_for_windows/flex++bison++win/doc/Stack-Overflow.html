@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Stack%20Overflow">Stack Overflow</a>,
+Previous:<a rel=previous href="Mystery-Conflicts.html#Mystery%20Conflicts">Mystery Conflicts</a>,
+Up:<a rel=up href="Algorithm.html#Algorithm">Algorithm</a>
+<hr><br>
+
+<h3>Stack Overflow, and How to Avoid It</h3>
+
+<p>The Bison parser stack can overflow if too many tokens are shifted and
+not reduced.  When this happens, the parser function <code>yyparse</code>
+returns a nonzero value, pausing only to call <code>yyerror</code> to report
+the overflow.
+
+<p>By defining the macro <code>YYMAXDEPTH</code>, you can control how deep the
+parser stack can become before a stack overflow occurs.  Define the
+macro with a value that is an integer.  This value is the maximum number
+of tokens that can be shifted (and not reduced) before overflow. 
+It must be a constant expression whose value is known at compile time.
+
+<p>The stack space allowed is not necessarily allocated.  If you specify a
+large value for <code>YYMAXDEPTH</code>, the parser actually allocates a small
+stack at first, and then makes it bigger by stages as needed.  This
+increasing allocation happens automatically and silently.  Therefore,
+you do not need to make <code>YYMAXDEPTH</code> painfully small merely to save
+space for ordinary inputs that do not need much stack.
+
+<p>The default value of <code>YYMAXDEPTH</code>, if you do not define it, is
+10000.
+
+<p>You can control how much stack is allocated initially by defining the
+macro <code>YYINITDEPTH</code>.  This value too must be a compile-time
+constant integer.  The default is 200.
+
+</body></html>
+

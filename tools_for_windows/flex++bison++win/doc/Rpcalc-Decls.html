@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Decls">Rpcalc Decls</a>,
+Next:<a rel=next href="Rpcalc-Rules.html#Rpcalc%20Rules">Rpcalc Rules</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>Declarations for <code>rpcalc</code></h4>
+
+<p>Here are the C and Bison declarations for the reverse polish notation
+calculator.  As in C, comments are placed between <code>/*<small>...</small>*/</code>.
+
+<br><pre>/* Reverse polish notation calculator. */
+
+%{
+#define YYSTYPE double
+#include &lt;math.h&gt;
+%}
+
+%token NUM
+
+%% /* Grammar rules and actions follow */
+</pre>
+
+<p>The C declarations section (see <a href="C-Declarations.html#C%20Declarations">The C Declarations Section</a>) contains two
+preprocessor directives.
+
+<p>The <code>#define</code> directive defines the macro <code>YYSTYPE</code>, thus
+specifying the C data type for semantic values of both tokens and groupings
+(see <a href="Value-Type.html#Value%20Type">Data Types of Semantic Values</a>).  The Bison parser will use whatever type
+<code>YYSTYPE</code> is defined as; if you don't define it, <code>int</code> is the
+default.  Because we specify <code>double</code>, each token and each expression
+has an associated value, which is a floating point number.
+
+<p>The <code>#include</code> directive is used to declare the exponentiation
+function <code>pow</code>.
+
+<p>The second section, Bison declarations, provides information to Bison about
+the token types (see <a href="Bison-Declarations.html#Bison%20Declarations">The Bison Declarations Section</a>).  Each terminal symbol that is
+not a single-character literal must be declared here.  (Single-character
+literals normally don't need to be declared.)  In this example, all the
+arithmetic operators are designated by single-character literals, so the
+only terminal symbol that needs to be declared is <code>NUM</code>, the token
+type for numeric constants.
+
+</body></html>
+

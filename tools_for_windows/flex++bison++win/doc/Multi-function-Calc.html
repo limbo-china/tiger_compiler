@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Multi-function%20Calc">Multi-function Calc</a>,
+Next:<a rel=next href="Exercises.html#Exercises">Exercises</a>,
+Previous:<a rel=previous href="Simple-Error-Recovery.html#Simple%20Error%20Recovery">Simple Error Recovery</a>,
+Up:<a rel=up href="Examples.html#Examples">Examples</a>
+<hr><br>
+
+<h3>Multi-Function Calculator: <code>mfcalc</code></h3>
+
+<p>Now that the basics of Bison have been discussed, it is time to move on to
+a more advanced problem.  The above calculators provided only five
+functions, <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> and <code>^</code>.  It would
+be nice to have a calculator that provides other mathematical functions such
+as <code>sin</code>, <code>cos</code>, etc.
+
+<p>It is easy to add new operators to the infix calculator as long as they are
+only single-character literals.  The lexical analyzer <code>yylex</code> passes
+back all non-number characters as tokens, so new grammar rules suffice for
+adding a new operator.  But we want something more flexible: built-in
+functions whose syntax has this form:
+
+<br><pre><var>function_name</var> (<var>argument</var>)
+</pre>
+
+<p>At the same time, we will add memory to the calculator, by allowing you
+to create named variables, store values in them, and use them later. 
+Here is a sample session with the multi-function calculator:
+
+<br><pre>% acalc
+pi = 3.141592653589
+3.1415926536
+sin(pi)
+0.0000000000
+alpha = beta1 = 2.3
+2.3000000000
+alpha
+2.3000000000
+ln(alpha)
+0.8329091229
+exp(ln(beta1))
+2.3000000000
+%
+</pre>
+
+<p>Note that multiple assignment and nested function calls are permitted.
+
+<ul>
+<li><a href="Mfcalc-Decl.html#Mfcalc%20Decl">Decl</a>:       Bison declarations for multi-function calculator. 
+<li><a href="Mfcalc-Rules.html#Mfcalc%20Rules">Rules</a>:     Grammar rules for the calculator. 
+<li><a href="Mfcalc-Symtab.html#Mfcalc%20Symtab">Symtab</a>:   Symbol table management subroutines. 
+</ul>
+
+</body></html>
+

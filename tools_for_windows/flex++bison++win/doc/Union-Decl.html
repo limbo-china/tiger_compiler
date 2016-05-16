@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Union%20Decl">Union Decl</a>,
+Next:<a rel=next href="Type-Decl.html#Type%20Decl">Type Decl</a>,
+Previous:<a rel=previous href="Precedence-Decl.html#Precedence%20Decl">Precedence Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>The Collection of Value Types</h4>
+
+<p>The <code>%union</code> declaration specifies the entire collection of possible
+data types for semantic values.  The keyword <code>%union</code> is followed by a
+pair of braces containing the same thing that goes inside a <code>union</code> in
+C.
+
+<p>For example:
+
+<br><pre>%union {
+  double val;
+  symrec *tptr;
+}
+</pre>
+
+<p>This says that the two alternative types are <code>double</code> and <code>symrec
+*</code>.  They are given names <code>val</code> and <code>tptr</code>; these names are used
+in the <code>%token</code> and <code>%type</code> declarations to pick one of the types
+for a terminal or nonterminal symbol (see <a href="Type-Decl.html#Type%20Decl">Nonterminal Symbols</a>).
+
+<p>Note that, unlike making a <code>union</code> declaration in C, you do not write
+a semicolon after the closing brace.
+
+</body></html>
+

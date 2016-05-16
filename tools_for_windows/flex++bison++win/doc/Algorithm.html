@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Algorithm">Algorithm</a>,
+Next:<a rel=next href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>,
+Previous:<a rel=previous href="Interface.html#Interface">Interface</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>The Bison Parser Algorithm</h2>
+
+<p>As Bison reads tokens, it pushes them onto a stack along with their
+semantic values.  The stack is called the <dfn>parser stack</dfn>.  Pushing a
+token is traditionally called <dfn>shifting</dfn>.
+
+<p>For example, suppose the infix calculator has read <code>1 + 5 *</code>, with a
+<code>3</code> to come.  The stack will have four elements, one for each token
+that was shifted.
+
+<p>But the stack does not always have an element for each token read.  When
+the last <var>n</var> tokens and groupings shifted match the components of a
+grammar rule, they can be combined according to that rule.  This is called
+<dfn>reduction</dfn>.  Those tokens and groupings are replaced on the stack by a
+single grouping whose symbol is the result (left hand side) of that rule. 
+Running the rule's action is part of the process of reduction, because this
+is what computes the semantic value of the resulting grouping.
+
+<p>For example, if the infix calculator's parser stack contains this:
+
+<br><pre>1 + 5 * 3
+</pre>
+
+<p>and the next input token is a newline character, then the last three
+elements can be reduced to 15 via the rule:
+
+<br><pre>expr: expr '*' expr;
+</pre>
+
+<p>Then the stack contains just these three elements:
+
+<br><pre>1 + 15
+</pre>
+
+<p>At this point, another reduction can be made, resulting in the single value
+16.  Then the newline token can be shifted.
+
+<p>The parser tries, by shifts and reductions, to reduce the entire input down
+to a single grouping whose symbol is the grammar's start-symbol
+(see <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>).
+
+<p>This kind of parser is known in the literature as a bottom-up parser.
+
+<ul>
+<li><a href="Look-Ahead.html#Look-Ahead">Look-Ahead</a>:         Parser looks one token ahead when deciding what to do. 
+<li><a href="Shift-Reduce.html#Shift%2fReduce">Shift/Reduce</a>:       Conflicts: when either shifting or reduction is valid. 
+<li><a href="Precedence.html#Precedence">Precedence</a>:         Operator precedence works by resolving conflicts. 
+<li><a href="Contextual-Precedence.html#Contextual%20Precedence">Contextual Precedence</a>:   When an operator's precedence depends on context. 
+<li><a href="Parser-States.html#Parser%20States">Parser States</a>:      The parser is a finite-state-machine with stack. 
+<li><a href="Reduce-Reduce.html#Reduce%2fReduce">Reduce/Reduce</a>:      When two rules are applicable in the same situation. 
+<li><a href="Mystery-Conflicts.html#Mystery%20Conflicts">Mystery Conflicts</a>:   Reduce/reduce conflicts that look unjustified. 
+<li><a href="Stack-Overflow.html#Stack%20Overflow">Stack Overflow</a>:     What happens when stack gets full.  How to avoid it. 
+</ul>
+
+</body></html>
+

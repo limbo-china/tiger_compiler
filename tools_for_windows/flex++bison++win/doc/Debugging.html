@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Debugging">Debugging</a>,
+Next:<a rel=next href="Invocation.html#Invocation">Invocation</a>,
+Previous:<a rel=previous href="Context-Dependency.html#Context%20Dependency">Context Dependency</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Debugging Your Parser</h2>
+
+<p>If a Bison grammar compiles properly but doesn't do what you want when it
+runs, the <code>yydebug</code> parser-trace feature can help you figure out why.
+
+<p>To enable compilation of trace facilities, you must define the macro
+<code>YYDEBUG</code> when you compile the parser.  You could use
+<code>-DYYDEBUG=1</code> as a compiler option or you could put <code>#define
+YYDEBUG 1</code> in the C declarations section of the grammar file
+(see <a href="C-Declarations.html#C%20Declarations">The C Declarations Section</a>).  Alternatively, use the <code>-t</code> option when
+you run Bison (see <a href="Invocation.html#Invocation">Invoking Bison</a>).  We always define <code>YYDEBUG</code> so that
+debugging is always possible.
+
+<p>The trace facility uses <code>stderr</code>, so you must add <code>#include&nbsp;&lt;stdio.h&gt;</code> to the C declarations section unless it is already there.
+
+<p>Once you have compiled the program with trace facilities, the way to
+request a trace is to store a nonzero value in the variable <code>yydebug</code>. 
+You can do this by making the C code do it (in <code>main</code>, perhaps), or
+you can alter the value with a C debugger.
+
+<p>Each step taken by the parser when <code>yydebug</code> is nonzero produces a
+line or two of trace information, written on <code>stderr</code>.  The trace
+messages tell you these things:
+
+<ul>
+<li>Each time the parser calls <code>yylex</code>, what kind of token was read.
+
+<li>Each time a token is shifted, the depth and complete contents of the
+state stack (see <a href="Parser-States.html#Parser%20States">Parser States</a>).
+
+<li>Each time a rule is reduced, which rule it is, and the complete contents
+of the state stack afterward. 
+</ul>
+
+<p>To make sense of this information, it helps to refer to the listing file
+produced by the Bison <code>-v</code> option (see <a href="Invocation.html#Invocation">Invoking Bison</a>).  This file
+shows the meaning of each state in terms of positions in various rules, and
+also what each state will do with each possible input token.  As you read
+the successive trace messages, you can see that the parser is functioning
+according to its specification in the listing file.  Eventually you will
+arrive at the place where something undesirable happens, and you will see
+which parts of the grammar are to blame.
+
+<p>The parser file is a C program and you can use C debuggers on it, but it's
+not easy to interpret what it is doing.  The parser function is a
+finite-state machine interpreter, and aside from the actions it executes
+the same code over and over.  Only the values of variables show where in
+the grammar it is working.
+
+<p>The debugging information normally gives the token type of each token
+read, but not its semantic value.  You can optionally define a macro
+named <code>YYPRINT</code> to provide a way to print the value.  If you define
+<code>YYPRINT</code>, it should take three arguments.  The parser will pass a
+standard I/O stream, the numeric code for the token type, and the token
+value (from <code>yylval</code>).
+
+<p>Here is an example of <code>YYPRINT</code> suitable for the multi-function
+calculator (see <a href="Mfcalc-Decl.html#Mfcalc%20Decl">Declarations for <code>mfcalc</code></a>):
+
+<br><pre>#define YYPRINT(file, type, value)   yyprint (file, type, value)
+
+static void
+yyprint (file, type, value)
+     FILE *file;
+     int type;
+     YYSTYPE value;
+{
+  if (type == VAR)
+    fprintf (file, " %s", value.tptr-&gt;name);
+  else if (type == NUM)
+    fprintf (file, " %d", value.val);
+}
+</pre>
+
+</body></html>
+

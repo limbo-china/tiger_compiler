@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="How%20Precedence">How Precedence</a>,
+Previous:<a rel=previous href="Precedence-Examples.html#Precedence%20Examples">Precedence Examples</a>,
+Up:<a rel=up href="Precedence.html#Precedence">Precedence</a>
+<hr><br>
+
+<h4>How Precedence Works</h4>
+
+<p>The first effect of the precedence declarations is to assign precedence
+levels to the terminal symbols declared.  The second effect is to assign
+precedence levels to certain rules: each rule gets its precedence from the
+last terminal symbol mentioned in the components.  (You can also specify
+explicitly the precedence of a rule.  See <a href="Contextual-Precedence.html#Contextual%20Precedence">Context-Dependent Precedence</a>.)
+
+<p>Finally, the resolution of conflicts works by comparing the
+precedence of the rule being considered with that of the
+look-ahead token.  If the token's precedence is higher, the
+choice is to shift.  If the rule's precedence is higher, the
+choice is to reduce.  If they have equal precedence, the choice
+is made based on the associativity of that precedence level.  The
+verbose output file made by <code>-v</code> (see <a href="Invocation.html#Invocation">Invoking Bison</a>) says
+how each conflict was resolved.
+
+<p>Not all rules and not all tokens have precedence.  If either the rule or
+the look-ahead token has no precedence, then the default is to shift.
+
+</body></html>
+

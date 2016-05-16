@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Recursion">Recursion</a>,
+Next:<a rel=next href="Semantics.html#Semantics">Semantics</a>,
+Previous:<a rel=previous href="Rules.html#Rules">Rules</a>,
+Up:<a rel=up href="Grammar-File.html#Grammar%20File">Grammar File</a>
+<hr><br>
+
+<h3>Recursive Rules</h3>
+
+<p>A rule is called <dfn>recursive</dfn> when its <var>result</var> nonterminal appears
+also on its right hand side.  Nearly all Bison grammars need to use
+recursion, because that is the only way to define a sequence of any number
+of somethings.  Consider this recursive definition of a comma-separated
+sequence of one or more expressions:
+
+<br><pre>expseq1:  exp
+        | expseq1 ',' exp
+        ;
+</pre>
+
+<p>Since the recursive use of <code>expseq1</code> is the leftmost symbol in the
+right hand side, we call this <dfn>left recursion</dfn>.  By contrast, here
+the same construct is defined using <dfn>right recursion</dfn>:
+
+<br><pre>expseq1:  exp
+        | exp ',' expseq1
+        ;
+</pre>
+
+<p>Any kind of sequence can be defined using either left recursion or
+right recursion, but you should always use left recursion, because it
+can parse a sequence of any number of elements with bounded stack
+space.  Right recursion uses up space on the Bison stack in proportion
+to the number of elements in the sequence, because all the elements
+must be shifted onto the stack before the rule can be applied even
+once.  See <a href="Algorithm.html#Algorithm">The Bison Parser Algorithm</a>, for
+further explanation of this.
+
+<p><dfn>Indirect</dfn> or <dfn>mutual</dfn> recursion occurs when the result of the
+rule does not appear directly on its right hand side, but does appear
+in rules for other nonterminals which do appear on its right hand
+side.
+
+<p>For example:
+
+<br><pre>expr:     primary
+        | primary '+' primary
+        ;
+
+primary:  constant
+        | '(' expr ')'
+        ;
+</pre>
+
+<p>defines two mutually-recursive nonterminals, since each refers to the
+other.
+
+</body></html>
+

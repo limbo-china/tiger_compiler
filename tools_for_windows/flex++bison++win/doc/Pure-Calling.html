@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Pure%20Calling">Pure Calling</a>,
+Previous:<a rel=previous href="Token-Positions.html#Token%20Positions">Token Positions</a>,
+Up:<a rel=up href="Lexical.html#Lexical">Lexical</a>
+<hr><br>
+
+<h4>Calling for Pure Parsers</h4>
+
+<p>When you use the Bison declaration <code>%pure_parser</code> to request a pure,
+reentrant parser, the global communication variables <code>yylval</code> and
+<code>yylloc</code> cannot be used.  (See <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>.)  In such parsers the
+two global variables are replaced by pointers passed as arguments to
+<code>yylex</code>.  You must declare them as shown here, and pass the
+information back by storing it through those pointers.
+
+<br><pre>yylex (lvalp, llocp)
+     YYSTYPE *lvalp;
+     YYLTYPE *llocp;
+{
+  <small>...</small>
+  *lvalp = value;  /* Put value onto Bison stack.  */
+  return INT;      /* Return the type of the token.  */
+  <small>...</small>
+}
+</pre>
+
+<p>If the grammar file does not use the <code>@</code> constructs to refer to
+textual positions, then the type <code>YYLTYPE</code> will not be defined.  In
+this case, omit the second argument; <code>yylex</code> will be called with
+only one argument.
+
+</body></html>
+

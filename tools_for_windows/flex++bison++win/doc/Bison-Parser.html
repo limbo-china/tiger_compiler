@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Bison%20Parser">Bison Parser</a>,
+Next:<a rel=next href="Stages.html#Stages">Stages</a>,
+Previous:<a rel=previous href="Semantic-Actions.html#Semantic%20Actions">Semantic Actions</a>,
+Up:<a rel=up href="Concepts.html#Concepts">Concepts</a>
+<hr><br>
+
+<h3>Bison Output: the Parser File</h3>
+
+<p>When you run Bison, you give it a Bison grammar file as input.  The output
+is a C source file that parses the language described by the grammar. 
+This file is called a <dfn>Bison parser</dfn>.  Keep in mind that the Bison
+utility and the Bison parser are two distinct programs: the Bison utility
+is a program whose output is the Bison parser that becomes part of your
+program.
+
+<p>The job of the Bison parser is to group tokens into groupings according to
+the grammar rules--for example, to build identifiers and operators into
+expressions.  As it does this, it runs the actions for the grammar rules it
+uses.
+
+<p>The tokens come from a function called the <dfn>lexical analyzer</dfn> that you
+must supply in some fashion (such as by writing it in C).  The Bison parser
+calls the lexical analyzer each time it wants a new token.  It doesn't know
+what is "inside" the tokens (though their semantic values may reflect
+this).  Typically the lexical analyzer makes the tokens by parsing
+characters of text, but Bison does not depend on this.  See <a href="Lexical.html#Lexical">The Lexical Analyzer Function <code>yylex</code></a>.
+
+<p>The Bison parser file is C code which defines a function named
+<code>yyparse</code> which implements that grammar.  This function does not make
+a complete C program: you must supply some additional functions.  One is
+the lexical analyzer.  Another is an error-reporting function which the
+parser calls to report an error.  In addition, a complete C program must
+start with a function called <code>main</code>; you have to provide this, and
+arrange for it to call <code>yyparse</code> or the parser will never run. 
+See <a href="Interface.html#Interface">Parser C-Language Interface</a>.
+
+<p>Aside from the token type names and the symbols in the actions you
+write, all variable and function names used in the Bison parser file
+begin with <code>yy</code> or <code>YY</code>.  This includes interface functions
+such as the lexical analyzer function <code>yylex</code>, the error reporting
+function <code>yyerror</code> and the parser function <code>yyparse</code> itself. 
+This also includes numerous identifiers used for internal purposes. 
+Therefore, you should avoid using C identifiers starting with <code>yy</code>
+or <code>YY</code> in the Bison grammar file except for the ones defined in
+this manual.
+
+</body></html>
+

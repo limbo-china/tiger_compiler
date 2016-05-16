@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Glossary">Glossary</a>,
+Next:<a rel=next href="Index.html#Index">Index</a>,
+Previous:<a rel=previous href="Table-of-Symbols.html#Table%20of%20Symbols">Table of Symbols</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Glossary</h2>
+
+<dl>
+<dt>Backus-Naur Form (BNF)
+<dd>Formal method of specifying context-free grammars.  BNF was first used
+in the <cite>ALGOL-60</cite> report, 1963.  See <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>.
+
+<br><dt>Context-free grammars
+<dd>Grammars specified as rules that can be applied regardless of context. 
+Thus, if there is a rule which says that an integer can be used as an
+expression, integers are allowed <em>anywhere</em> an expression is
+permitted.  See <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>.
+
+<br><dt>Dynamic allocation
+<dd>Allocation of memory that occurs during execution, rather than at
+compile time or on entry to a function.
+
+<br><dt>Empty string
+<dd>Analogous to the empty set in set theory, the empty string is a
+character string of length zero.
+
+<br><dt>Finite-state stack machine
+<dd>A "machine" that has discrete states in which it is said to exist at
+each instant in time.  As input to the machine is processed, the
+machine moves from state to state as specified by the logic of the
+machine.  In the case of the parser, the input is the language being
+parsed, and the states correspond to various stages in the grammar
+rules.  See <a href="Algorithm.html#Algorithm">The Bison Parser Algorithm</a>.
+
+<br><dt>Grouping
+<dd>A language construct that is (in general) grammatically divisible;
+for example, `expression' or `declaration' in C. 
+See <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>.
+
+<br><dt>Infix operator
+<dd>An arithmetic operator that is placed between the operands on which it
+performs some operation.
+
+<br><dt>Input stream
+<dd>A continuous flow of data between devices or programs.
+
+<br><dt>Language construct
+<dd>One of the typical usage schemas of the language.  For example, one of
+the constructs of the C language is the <code>if</code> statement. 
+See <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>.
+
+<br><dt>Left associativity
+<dd>Operators having left associativity are analyzed from left to right:
+<code>a+b+c</code> first computes <code>a+b</code> and then combines with
+<code>c</code>.  See <a href="Precedence.html#Precedence">Operator Precedence</a>.
+
+<br><dt>Left recursion
+<dd>A rule whose result symbol is also its first component symbol;
+for example, <code>expseq1 : expseq1 ',' exp;</code>.  See <a href="Recursion.html#Recursion">Recursive Rules</a>.
+
+<br><dt>Left-to-right parsing
+<dd>Parsing a sentence of a language by analyzing it token by token from
+left to right.  See <a href="Algorithm.html#Algorithm">The Bison Parser Algorithm</a>.
+
+<br><dt>Lexical analyzer (scanner)
+<dd>A function that reads an input stream and returns tokens one by one. 
+See <a href="Lexical.html#Lexical">The Lexical Analyzer Function <code>yylex</code></a>.
+
+<br><dt>Lexical tie-in
+<dd>A flag, set by actions in the grammar rules, which alters the way
+tokens are parsed.  See <a href="Lexical-Tie-ins.html#Lexical%20Tie-ins">Lexical Tie-ins</a>.
+
+<br><dt>Look-ahead token
+<dd>A token already read but not yet shifted.  See <a href="Look-Ahead.html#Look-Ahead">Look-Ahead Tokens</a>.
+
+<br><dt>LALR(1)
+<dd>The class of context-free grammars that Bison (like most other parser
+generators) can handle; a subset of LR(1).  See <a href="Mystery-Conflicts.html#Mystery%20Conflicts">Mysterious Reduce/Reduce Conflicts</a>.
+
+<br><dt>LR(1)
+<dd>The class of context-free grammars in which at most one token of
+look-ahead is needed to disambiguate the parsing of any piece of input.
+
+<br><dt>Nonterminal symbol
+<dd>A grammar symbol standing for a grammatical construct that can
+be expressed through rules in terms of smaller constructs; in other
+words, a construct that is not a token.  See <a href="Symbols.html#Symbols">Symbols</a>.
+
+<br><dt>Parse error
+<dd>An error encountered during parsing of an input stream due to invalid
+syntax.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt>Parser
+<dd>A function that recognizes valid sentences of a language by analyzing
+the syntax structure of a set of tokens passed to it from a lexical
+analyzer.
+
+<br><dt>Postfix operator
+<dd>An arithmetic operator that is placed after the operands upon which it
+performs some operation.
+
+<br><dt>Reduction
+<dd>Replacing a string of nonterminals and/or terminals with a single
+nonterminal, according to a grammar rule.  See <a href="Algorithm.html#Algorithm">The Bison Parser Algorithm</a>.
+
+<br><dt>Reentrant
+<dd>A reentrant subprogram is a subprogram which can be in invoked any
+number of times in parallel, without interference between the various
+invocations.  See <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>.
+
+<br><dt>Reverse polish notation
+<dd>A language in which all operators are postfix operators.
+
+<br><dt>Right recursion
+<dd>A rule whose result symbol is also its last component symbol;
+for example, <code>expseq1: exp ',' expseq1;</code>.  See <a href="Recursion.html#Recursion">Recursive Rules</a>.
+
+<br><dt>Semantics
+<dd>In computer languages, the semantics are specified by the actions
+taken for each instance of the language, i.e., the meaning of
+each statement.  See <a href="Semantics.html#Semantics">Defining Language Semantics</a>.
+
+<br><dt>Shift
+<dd>A parser is said to shift when it makes the choice of analyzing
+further input from the stream rather than reducing immediately some
+already-recognized rule.  See <a href="Algorithm.html#Algorithm">The Bison Parser Algorithm</a>.
+
+<br><dt>Single-character literal
+<dd>A single character that is recognized and interpreted as is. 
+See <a href="Grammar-in-Bison.html#Grammar%20in%20Bison">From Formal Rules to Bison Input</a>.
+
+<br><dt>Start symbol
+<dd>The nonterminal symbol that stands for a complete valid utterance in
+the language being parsed.  The start symbol is usually listed as the
+first nonterminal symbol in a language specification. 
+See <a href="Start-Decl.html#Start%20Decl">The Start-Symbol</a>.
+
+<br><dt>Symbol table
+<dd>A data structure where symbol names and associated data are stored
+during parsing to allow for recognition and use of existing
+information in repeated uses of a symbol.  See <a href="Multi-function-Calc.html#Multi-function%20Calc">Multi-function Calc</a>.
+
+<br><dt>Token
+<dd>A basic, grammatically indivisible unit of a language.  The symbol
+that describes a token in the grammar is a terminal symbol. 
+The input of the Bison parser is a stream of tokens which comes from
+the lexical analyzer.  See <a href="Symbols.html#Symbols">Symbols</a>.
+
+<br><dt>Terminal symbol
+<dd>A grammar symbol that has no rules in the grammar and therefore
+is grammatically indivisible.  The piece of text it represents
+is a token.  See <a href="Language-and-Grammar.html#Language%20and%20Grammar">Languages and Context-Free Grammars</a>. 
+</dl>
+
+</body></html>
+

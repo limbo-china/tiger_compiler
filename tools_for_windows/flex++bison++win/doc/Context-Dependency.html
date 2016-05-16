@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Context%20Dependency">Context Dependency</a>,
+Next:<a rel=next href="Debugging.html#Debugging">Debugging</a>,
+Previous:<a rel=previous href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Handling Context Dependencies</h2>
+
+<p>The Bison paradigm is to parse tokens first, then group them into larger
+syntactic units.  In many languages, the meaning of a token is affected by
+its context.  Although this violates the Bison paradigm, certain techniques
+(known as <dfn>kludges</dfn>) may enable you to write Bison parsers for such
+languages.
+
+<ul>
+<li><a href="Semantic-Tokens.html#Semantic%20Tokens">Semantic Tokens</a>:    Token parsing can depend on the semantic context. 
+<li><a href="Lexical-Tie-ins.html#Lexical%20Tie-ins">Lexical Tie-ins</a>:    Token parsing can depend on the syntactic context. 
+<li><a href="Tie-in-Recovery.html#Tie-in%20Recovery">Tie-in Recovery</a>:    Lexical tie-ins have implications for how
+                        error recovery rules must be written. 
+</ul>
+
+<p>(Actually, "kludge" means any technique that gets its job done but is
+neither clean nor robust.)
+
+</body></html>
+

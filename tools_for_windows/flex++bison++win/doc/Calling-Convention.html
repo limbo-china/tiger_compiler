@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Calling%20Convention">Calling Convention</a>,
+Next:<a rel=next href="Token-Values.html#Token%20Values">Token Values</a>,
+Up:<a rel=up href="Lexical.html#Lexical">Lexical</a>
+<hr><br>
+
+<h4>Calling Convention for <code>yylex</code></h4>
+
+<p>The value that <code>yylex</code> returns must be the numeric code for the type
+of token it has just found, or 0 for end-of-input.
+
+<p>When a token is referred to in the grammar rules by a name, that name
+in the parser file becomes a C macro whose definition is the proper
+numeric code for that token type.  So <code>yylex</code> can use the name
+to indicate that type.  See <a href="Symbols.html#Symbols">Symbols</a>.
+
+<p>When a token is referred to in the grammar rules by a character literal,
+the numeric code for that character is also the code for the token type. 
+So <code>yylex</code> can simply return that character code.  The null character
+must not be used this way, because its code is zero and that is what
+signifies end-of-input.
+
+<p>Here is an example showing these things:
+
+<br><pre>yylex ()
+{
+  <small>...</small>
+  if (c == EOF)     /* Detect end of file. */
+    return 0;
+  <small>...</small>
+  if (c == '+' || c == '-')
+    return c;      /* Assume token type for `+' is '+'. */
+  <small>...</small>
+  return INT;      /* Return the type of the token. */
+  <small>...</small>
+}
+</pre>
+
+<p>This interface has been designed so that the output from the <code>lex</code>
+utility can be used without change as the definition of <code>yylex</code>.
+
+</body></html>
+

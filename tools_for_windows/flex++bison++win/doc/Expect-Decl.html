@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Expect%20Decl">Expect Decl</a>,
+Next:<a rel=next href="Start-Decl.html#Start%20Decl">Start Decl</a>,
+Previous:<a rel=previous href="Type-Decl.html#Type%20Decl">Type Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>Suppressing Conflict Warnings</h4>
+
+<p>Bison normally warns if there are any conflicts in the grammar
+(see <a href="Shift-Reduce.html#Shift%2fReduce">Shift/Reduce Conflicts</a>), but most real grammars have harmless shift/reduce
+conflicts which are resolved in a predictable way and would be difficult to
+eliminate.  It is desirable to suppress the warning about these conflicts
+unless the number of conflicts changes.  You can do this with the
+<code>%expect</code> declaration.
+
+<p>The declaration looks like this:
+
+<br><pre>%expect <var>n</var>
+</pre>
+
+<p>Here <var>n</var> is a decimal integer.  The declaration says there should be no
+warning if there are <var>n</var> shift/reduce conflicts and no reduce/reduce
+conflicts.  The usual warning is given if there are either more or fewer
+conflicts, or if there are any reduce/reduce conflicts.
+
+<p>In general, using <code>%expect</code> involves these steps:
+
+<ul>
+<li>Compile your grammar without <code>%expect</code>.  Use the <code>-v</code> option
+to get a verbose list of where the conflicts occur.  Bison will also
+print the number of conflicts.
+
+<li>Check each of the conflicts to make sure that Bison's default
+resolution is what you really want.  If not, rewrite the grammar and
+go back to the beginning.
+
+<li>Add an <code>%expect</code> declaration, copying the number <var>n</var> from the
+number which Bison printed. 
+</ul>
+
+<p>Now Bison will stop annoying you about the conflicts you have checked, but
+it will warn you again if changes in the grammar result in additional
+conflicts.
+
+</body></html>
+

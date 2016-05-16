@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Rules">Rpcalc Rules</a>,
+Next:<a rel=next href="Rpcalc-Lexer.html#Rpcalc%20Lexer">Rpcalc Lexer</a>,
+Previous:<a rel=previous href="Rpcalc-Decls.html#Rpcalc%20Decls">Rpcalc Decls</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>Grammar Rules for <code>rpcalc</code></h4>
+
+<p>Here are the grammar rules for the reverse polish notation calculator.
+
+<br><pre>input:    /* empty */
+        | input line
+;
+
+line:     '\n'
+        | exp '\n'  { printf ("\t%.10g\n", $1); }
+;
+
+exp:      NUM             { $$ = $1;         }
+        | exp exp '+'     { $$ = $1 + $2;    }
+        | exp exp '-'     { $$ = $1 - $2;    }
+        | exp exp '*'     { $$ = $1 * $2;    }
+        | exp exp '/'     { $$ = $1 / $2;    }
+      /* Exponentiation */
+        | exp exp '^'     { $$ = pow ($1, $2); }
+      /* Unary minus    */
+        | exp 'n'         { $$ = -$1;        }
+;
+%%
+</pre>
+
+<p>The groupings of the rpcalc "language" defined here are the expression
+(given the name <code>exp</code>), the line of input (<code>line</code>), and the
+complete input transcript (<code>input</code>).  Each of these nonterminal
+symbols has several alternate rules, joined by the <code>|</code> punctuator
+which is read as "or".  The following sections explain what these rules
+mean.
+
+<p>The semantics of the language is determined by the actions taken when a
+grouping is recognized.  The actions are the C code that appears inside
+braces.  See <a href="Actions.html#Actions">Actions</a>.
+
+<p>You must specify these actions in C, but Bison provides the means for
+passing semantic values between the rules.  In each action, the
+pseudo-variable <code>$$</code> stands for the semantic value for the grouping
+that the rule is going to construct.  Assigning a value to <code>$$</code> is the
+main job of most actions.  The semantic values of the components of the
+rule are referred to as <code>$1</code>, <code>$2</code>, and so on.
+
+<ul>
+<li><a href="Rpcalc-Input.html#Rpcalc%20Input">Rpcalc Input</a>: 
+<li><a href="Rpcalc-Line.html#Rpcalc%20Line">Rpcalc Line</a>: 
+<li><a href="Rpcalc-Expr.html#Rpcalc%20Expr">Rpcalc Expr</a>: 
+</ul>
+
+</body></html>
+

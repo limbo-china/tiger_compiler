@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Semantic%20Tokens">Semantic Tokens</a>,
+Next:<a rel=next href="Lexical-Tie-ins.html#Lexical%20Tie-ins">Lexical Tie-ins</a>,
+Up:<a rel=up href="Context-Dependency.html#Context%20Dependency">Context Dependency</a>
+<hr><br>
+
+<h3>Semantic Info in Token Types</h3>
+
+<p>The C language has a context dependency: the way an identifier is used
+depends on what its current meaning is.  For example, consider this:
+
+<br><pre>foo (x);
+</pre>
+
+<p>This looks like a function call statement, but if <code>foo</code> is a typedef
+name, then this is actually a declaration of <code>x</code>.  How can a Bison
+parser for C decide how to parse this input?
+
+<p>The method used in GNU C is to have two different token types,
+<code>IDENTIFIER</code> and <code>TYPENAME</code>.  When <code>yylex</code> finds an
+identifier, it looks up the current declaration of the identifier in order
+to decide which token type to return: <code>TYPENAME</code> if the identifier is
+declared as a typedef, <code>IDENTIFIER</code> otherwise.
+
+<p>The grammar rules can then express the context dependency by the choice of
+token type to recognize.  <code>IDENTIFIER</code> is accepted as an expression,
+but <code>TYPENAME</code> is not.  <code>TYPENAME</code> can start a declaration, but
+<code>IDENTIFIER</code> cannot.  In contexts where the meaning of the identifier
+is <em>not</em> significant, such as in declarations that can shadow a
+typedef name, either <code>TYPENAME</code> or <code>IDENTIFIER</code> is
+accepted--there is one rule for each of the two token types.
+
+<p>This technique is simple to use if the decision of which kinds of
+identifiers to allow is made at a place close to where the identifier is
+parsed.  But in C this is not always so: C allows a declaration to
+redeclare a typedef name provided an explicit type has been specified
+earlier:
+
+<br><pre>typedef int foo, bar, lose;
+static foo (bar);        /* redeclare <code>bar</code> as static variable */
+static int foo (lose);   /* redeclare <code>foo</code> as function */
+</pre>
+
+<p>Unfortunately, the name being declared is separated from the declaration
+construct itself by a complicated syntactic structure--the "declarator".
+
+<p>As a result, the part of Bison parser for C needs to be duplicated, with
+all the nonterminal names changed: once for parsing a declaration in which
+a typedef name can be redefined, and once for parsing a declaration in
+which that can't be done.  Here is a part of the duplication, with actions
+omitted for brevity:
+
+<br><pre>initdcl:
+          declarator maybeasm '='
+          init
+        | declarator maybeasm
+        ;
+
+notype_initdcl:
+          notype_declarator maybeasm '='
+          init
+        | notype_declarator maybeasm
+        ;
+</pre>
+
+<p>Here <code>initdcl</code> can redeclare a typedef name, but <code>notype_initdcl</code>
+cannot.  The distinction between <code>declarator</code> and
+<code>notype_declarator</code> is the same sort of thing.
+
+<p>There is some similarity between this technique and a lexical tie-in
+(described next), in that information which alters the lexical analysis is
+changed during parsing by other parts of the program.  The difference is
+here the information is global, and is used for other purposes in the
+program.  A true lexical tie-in has a special-purpose flag controlled by
+the syntactic context.
+
+</body></html>
+

@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Value%20Type">Value Type</a>,
+Next:<a rel=next href="Multiple-Types.html#Multiple%20Types">Multiple Types</a>,
+Up:<a rel=up href="Semantics.html#Semantics">Semantics</a>
+<hr><br>
+
+<h4>Data Types of Semantic Values</h4>
+
+<p>In a simple program it may be sufficient to use the same data type for
+the semantic values of all language constructs.  This was true in the
+RPN and infix calculator examples (see <a href="RPN-Calc.html#RPN%20Calc">Reverse Polish Notation Calculator</a>).
+
+<p>Bison's default is to use type <code>int</code> for all semantic values.  To
+specify some other type, define <code>YYSTYPE</code> as a macro, like this:
+
+<br><pre>#define YYSTYPE double
+</pre>
+
+<p>This macro definition must go in the C declarations section of the grammar
+file (see <a href="Grammar-Outline.html#Grammar%20Outline">Outline of a Bison Grammar</a>).
+
+</body></html>
+

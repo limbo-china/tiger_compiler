@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Pure%20Decl">Pure Decl</a>,
+Next:<a rel=next href="Decl-Summary.html#Decl%20Summary">Decl Summary</a>,
+Previous:<a rel=previous href="Start-Decl.html#Start%20Decl">Start Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>A Pure (Reentrant) Parser</h4>
+
+<p>A <dfn>reentrant</dfn> program is one which does not alter in the course of
+execution; in other words, it consists entirely of <dfn>pure</dfn> (read-only)
+code.  Reentrancy is important whenever asynchronous execution is possible;
+for example, a nonreentrant program may not be safe to call from a signal
+handler.  In systems with multiple threads of control, a nonreentrant
+program must be called only within interlocks.
+
+<p>The Bison parser is not normally a reentrant program, because it uses
+statically allocated variables for communication with <code>yylex</code>.  These
+variables include <code>yylval</code> and <code>yylloc</code>.
+
+<p>The Bison declaration <code>%pure_parser</code> says that you want the parser
+to be reentrant.  It looks like this:
+
+<br><pre>%pure_parser
+</pre>
+
+<p>The effect is that the two communication variables become local
+variables in <code>yyparse</code>, and a different calling convention is used for
+the lexical analyzer function <code>yylex</code>.  See <a href="Pure-Calling.html#Pure%20Calling">Calling for Pure Parsers</a>, for the
+details of this.  The variable <code>yynerrs</code> also becomes local in
+<code>yyparse</code> (see <a href="Error-Reporting.html#Error%20Reporting">The Error Reporting Function <code>yyerror</code></a>).  The convention for calling
+<code>yyparse</code> itself is unchanged.
+
+</body></html>
+

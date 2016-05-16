@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Reduce%2fReduce">Reduce/Reduce</a>,
+Next:<a rel=next href="Mystery-Conflicts.html#Mystery%20Conflicts">Mystery Conflicts</a>,
+Previous:<a rel=previous href="Parser-States.html#Parser%20States">Parser States</a>,
+Up:<a rel=up href="Algorithm.html#Algorithm">Algorithm</a>
+<hr><br>
+
+<h3>Reduce/Reduce Conflicts</h3>
+
+<p>A reduce/reduce conflict occurs if there are two or more rules that apply
+to the same sequence of input.  This usually indicates a serious error
+in the grammar.
+
+<p>For example, here is an erroneous attempt to define a sequence
+of zero or more <code>word</code> groupings.
+
+<br><pre>sequence: /* empty */
+                { printf ("empty sequence\n"); }
+        | maybeword
+        | sequence word
+                { printf ("added word %s\n", $2); }
+        ;
+
+maybeword: /* empty */
+                { printf ("empty maybeword\n"); }
+        | word
+                { printf ("single word %s\n", $1); }
+        ;
+</pre>
+
+<p>The error is an ambiguity: there is more than one way to parse a single
+<code>word</code> into a <code>sequence</code>.  It could be reduced to a
+<code>maybeword</code> and then into a <code>sequence</code> via the second rule. 
+Alternatively, nothing-at-all could be reduced into a <code>sequence</code>
+via the first rule, and this could be combined with the <code>word</code>
+using the third rule for <code>sequence</code>.
+
+<p>There is also more than one way to reduce nothing-at-all into a
+<code>sequence</code>.  This can be done directly via the first rule,
+or indirectly via <code>maybeword</code> and then the second rule.
+
+<p>You might think that this is a distinction without a difference, because it
+does not change whether any particular input is valid or not.  But it does
+affect which actions are run.  One parsing order runs the second rule's
+action; the other runs the first rule's action and the third rule's action. 
+In this example, the output of the program changes.
+
+<p>Bison resolves a reduce/reduce conflict by choosing to use the rule that
+appears first in the grammar, but it is very risky to rely on this.  Every
+reduce/reduce conflict must be studied and usually eliminated.  Here is the
+proper way to define <code>sequence</code>:
+
+<br><pre>sequence: /* empty */
+                { printf ("empty sequence\n"); }
+        | sequence word
+                { printf ("added word %s\n", $2); }
+        ;
+</pre>
+
+<p>Here is another common error that yields a reduce/reduce conflict:
+
+<br><pre>sequence: /* empty */
+        | sequence words
+        | sequence redirects
+        ;
+
+words:    /* empty */
+        | words word
+        ;
+
+redirects:/* empty */
+        | redirects redirect
+        ;
+</pre>
+
+<p>The intention here is to define a sequence which can contain either
+<code>word</code> or <code>redirect</code> groupings.  The individual definitions of
+<code>sequence</code>, <code>words</code> and <code>redirects</code> are error-free, but the
+three together make a subtle ambiguity: even an empty input can be parsed
+in infinitely many ways!
+
+<p>Consider: nothing-at-all could be a <code>words</code>.  Or it could be two
+<code>words</code> in a row, or three, or any number.  It could equally well be a
+<code>redirects</code>, or two, or any number.  Or it could be a <code>words</code>
+followed by three <code>redirects</code> and another <code>words</code>.  And so on.
+
+<p>Here are two ways to correct these rules.  First, to make it a single level
+of sequence:
+
+<br><pre>sequence: /* empty */
+        | sequence word
+        | sequence redirect
+        ;
+</pre>
+
+<p>Second, to prevent either a <code>words</code> or a <code>redirects</code>
+from being empty:
+
+<br><pre>sequence: /* empty */
+        | sequence words
+        | sequence redirects
+        ;
+
+words:    word
+        | words word
+        ;
+
+redirects:redirect
+        | redirects redirect
+        ;
+</pre>
+
+</body></html>
+

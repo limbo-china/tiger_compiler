@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Multiple%20Parsers">Multiple Parsers</a>,
+Previous:<a rel=previous href="Declarations.html#Declarations">Declarations</a>,
+Up:<a rel=up href="Grammar-File.html#Grammar%20File">Grammar File</a>
+<hr><br>
+
+<h3>Multiple Parsers in the Same Program</h3>
+
+<p>Most programs that use Bison parse only one language and therefore contain
+only one Bison parser.  But what if you want to parse more than one
+language with the same program?  Then you need to avoid a name conflict
+between different definitions of <code>yyparse</code>, <code>yylval</code>, and so on.
+
+<p>The easy way to do this is to use the option <code>-p <var>prefix</var></code>
+(see <a href="Invocation.html#Invocation">Invoking Bison</a>).  This renames the interface functions and
+variables of the Bison parser to start with <var>prefix</var> instead of
+<code>yy</code>.  You can use this to give each parser distinct names that do
+not conflict.
+
+<p>The precise list of symbols renamed is <code>yyparse</code>, <code>yylex</code>,
+<code>yyerror</code>, <code>yylval</code>, <code>yychar</code> and <code>yydebug</code>.  For
+example, if you use <code>-p c</code>, the names become <code>cparse</code>,
+<code>clex</code>, and so on.
+
+<p><strong>All the other variables and macros associated with Bison are not
+renamed.</strong> These others are not global; there is no conflict if the same
+name is used in different parsers.  For example, <code>YYSTYPE</code> is not
+renamed, but defining this in different ways in different parsers causes
+no trouble (see <a href="Value-Type.html#Value%20Type">Data Types of Semantic Values</a>).
+
+<p>The <code>-p</code> option works by adding macro definitions to the beginning
+of the parser source file, defining <code>yyparse</code> as
+<code><var>prefix</var>parse</code>, and so on.  This effectively substitutes one
+name for the other in the entire parser file.
+
+</body></html>
+

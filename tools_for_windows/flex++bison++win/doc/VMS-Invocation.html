@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="VMS%20Invocation">VMS Invocation</a>,
+Previous:<a rel=previous href="Option-Cross-Key.html#Option%20Cross%20Key">Option Cross Key</a>,
+Up:<a rel=up href="Invocation.html#Invocation">Invocation</a>
+<hr><br>
+
+<h3>Invoking Bison under VMS</h3>
+
+<p>The command line syntax for Bison on VMS is a variant of the usual
+Bison command syntax--adapted to fit VMS conventions.
+
+<p>To find the VMS equivalent for any Bison option, start with the long
+option, and substitute a <code>/</code> for the leading <code>--</code>, and
+substitute a <code>_</code> for each <code>-</code> in the name of the long option. 
+For example, the following invocation under VMS:
+
+<br><pre>bison /debug/name_prefix=bar foo.y
+</pre>
+
+<p>is equivalent to the following command under POSIX.
+
+<br><pre>bison --debug --name-prefix=bar foo.y
+</pre>
+
+<p>The VMS file system does not permit filenames such as
+<code>foo.tab.c</code>.  In the above example, the output file
+would instead be named <code>foo_tab.c</code>.
+
+</body></html>
+

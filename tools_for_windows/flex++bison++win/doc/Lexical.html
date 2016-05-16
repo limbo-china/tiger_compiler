@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Lexical">Lexical</a>,
+Next:<a rel=next href="Error-Reporting.html#Error%20Reporting">Error Reporting</a>,
+Previous:<a rel=previous href="Parser-Function.html#Parser%20Function">Parser Function</a>,
+Up:<a rel=up href="Interface.html#Interface">Interface</a>
+<hr><br>
+
+<h3>The Lexical Analyzer Function <code>yylex</code></h3>
+
+<p>The <dfn>lexical analyzer</dfn> function, <code>yylex</code>, recognizes tokens from
+the input stream and returns them to the parser.  Bison does not create
+this function automatically; you must write it so that <code>yyparse</code> can
+call it.  The function is sometimes referred to as a lexical scanner.
+
+<p>In simple programs, <code>yylex</code> is often defined at the end of the Bison
+grammar file.  If <code>yylex</code> is defined in a separate source file, you
+need to arrange for the token-type macro definitions to be available there. 
+To do this, use the <code>-d</code> option when you run Bison, so that it will
+write these macro definitions into a separate header file
+<code><var>name</var>.tab.h</code> which you can include in the other source files
+that need it.  See <a href="Invocation.html#Invocation">Invoking Bison</a>.
+
+<ul>
+<li><a href="Calling-Convention.html#Calling%20Convention">Calling Convention</a>:   How <code>yyparse</code> calls <code>yylex</code>. 
+<li><a href="Token-Values.html#Token%20Values">Token Values</a>:       How <code>yylex</code> must return the semantic value
+                        of the token it has read. 
+<li><a href="Token-Positions.html#Token%20Positions">Token Positions</a>:    How <code>yylex</code> must return the text position
+                        (line number, etc.) of the token, if the
+                        actions want that. 
+<li><a href="Pure-Calling.html#Pure%20Calling">Pure Calling</a>:       How the calling convention differs
+                        in a pure parser (see <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>). 
+</ul>
+
+</body></html>
+

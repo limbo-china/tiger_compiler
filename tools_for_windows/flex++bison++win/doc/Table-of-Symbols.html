@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Table%20of%20Symbols">Table of Symbols</a>,
+Next:<a rel=next href="Glossary.html#Glossary">Glossary</a>,
+Previous:<a rel=previous href="Invocation.html#Invocation">Invocation</a>,
+Up:<a rel=up href="index.html#Top">Top</a>
+<hr><br>
+
+<h2>Bison Symbols</h2>
+
+<dl>
+<dt><code>error</code>
+<dd>A token name reserved for error recovery.  This token may be used in
+grammar rules so as to allow the Bison parser to recognize an error in
+the grammar without halting the process.  In effect, a sentence
+containing an error may be recognized as valid.  On a parse error, the
+token <code>error</code> becomes the current look-ahead token.  Actions
+corresponding to <code>error</code> are then executed, and the look-ahead
+token is reset to the token that originally caused the violation. 
+See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>YYABORT</code>
+<dd>Macro to pretend that an unrecoverable syntax error has occurred, by
+making <code>yyparse</code> return 1 immediately.  The error reporting
+function <code>yyerror</code> is not called.  See <a href="Parser-Function.html#Parser%20Function">The Parser Function <code>yyparse</code></a>.
+
+<br><dt><code>YYACCEPT</code>
+<dd>Macro to pretend that a complete utterance of the language has been
+read, by making <code>yyparse</code> return 0 immediately. 
+See <a href="Parser-Function.html#Parser%20Function">The Parser Function <code>yyparse</code></a>.
+
+<br><dt><code>YYBACKUP</code>
+<dd>Macro to discard a value from the parser stack and fake a look-ahead
+token.  See <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>.
+
+<br><dt><code>YYERROR</code>
+<dd>Macro to pretend that a syntax error has just been detected: call
+<code>yyerror</code> and then perform normal error recovery if possible
+(see <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>), or (if recovery is impossible) make
+<code>yyparse</code> return 1.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>YYERROR_VERBOSE</code>
+<dd>Macro that you define with <code>#define</code> in the Bison declarations
+section to request verbose, specific error message strings when
+<code>yyerror</code> is called.
+
+<br><dt><code>YYINITDEPTH</code>
+<dd>Macro for specifying the initial size of the parser stack. 
+See <a href="Stack-Overflow.html#Stack%20Overflow">Stack Overflow</a>.
+
+<br><dt><code>YYLTYPE</code>
+<dd>Macro for the data type of <code>yylloc</code>; a structure with four
+members.  See <a href="Token-Positions.html#Token%20Positions">Textual Positions of Tokens</a>.
+
+<br><dt><code>YYMAXDEPTH</code>
+<dd>Macro for specifying the maximum size of the parser stack. 
+See <a href="Stack-Overflow.html#Stack%20Overflow">Stack Overflow</a>.
+
+<br><dt><code>YYRECOVERING</code>
+<dd>Macro whose value indicates whether the parser is recovering from a
+syntax error.  See <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>.
+
+<br><dt><code>YYSTYPE</code>
+<dd>Macro for the data type of semantic values; <code>int</code> by default. 
+See <a href="Value-Type.html#Value%20Type">Data Types of Semantic Values</a>.
+
+<br><dt><code>yychar</code>
+<dd>External integer variable that contains the integer value of the
+current look-ahead token.  (In a pure parser, it is a local variable
+within <code>yyparse</code>.)  Error-recovery rule actions may examine this
+variable.  See <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>.
+
+<br><dt><code>yyclearin</code>
+<dd>Macro used in error-recovery rule actions.  It clears the previous
+look-ahead token.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>yydebug</code>
+<dd>External integer variable set to zero by default.  If <code>yydebug</code>
+is given a nonzero value, the parser will output information on input
+symbols and parser action.  See <a href="Debugging.html#Debugging">Debugging Your Parser</a>.
+
+<br><dt><code>yyerrok</code>
+<dd>Macro to cause parser to recover immediately to its normal mode
+after a parse error.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>yyerror</code>
+<dd>User-supplied function to be called by <code>yyparse</code> on error.  The
+function receives one argument, a pointer to a character string
+containing an error message.  See <a href="Error-Reporting.html#Error%20Reporting">The Error Reporting Function <code>yyerror</code></a>.
+
+<br><dt><code>yylex</code>
+<dd>User-supplied lexical analyzer function, called with no arguments
+to get the next token.  See <a href="Lexical.html#Lexical">The Lexical Analyzer Function <code>yylex</code></a>.
+
+<br><dt><code>yylval</code>
+<dd>External variable in which <code>yylex</code> should place the semantic
+value associated with a token.  (In a pure parser, it is a local
+variable within <code>yyparse</code>, and its address is passed to
+<code>yylex</code>.)  See <a href="Token-Values.html#Token%20Values">Semantic Values of Tokens</a>.
+
+<br><dt><code>yylloc</code>
+<dd>External variable in which <code>yylex</code> should place the line and
+column numbers associated with a token.  (In a pure parser, it is a
+local variable within <code>yyparse</code>, and its address is passed to
+<code>yylex</code>.)  You can ignore this variable if you don't use the
+<code>@</code> feature in the grammar actions.  See <a href="Token-Positions.html#Token%20Positions">Textual Positions of Tokens</a>.
+
+<br><dt><code>yynerrs</code>
+<dd>Global variable which Bison increments each time there is a parse
+error.  (In a pure parser, it is a local variable within
+<code>yyparse</code>.)  See <a href="Error-Reporting.html#Error%20Reporting">The Error Reporting Function <code>yyerror</code></a>.
+
+<br><dt><code>yyparse</code>
+<dd>The parser function produced by Bison; call this function to start
+parsing.  See <a href="Parser-Function.html#Parser%20Function">The Parser Function <code>yyparse</code></a>.
+
+<br><dt><code>%left</code>
+<dd>Bison declaration to assign left associativity to token(s). 
+See <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>.
+
+<br><dt><code>%nonassoc</code>
+<dd>Bison declaration to assign nonassociativity to token(s). 
+See <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>.
+
+<br><dt><code>%prec</code>
+<dd>Bison declaration to assign a precedence to a specific rule. 
+See <a href="Contextual-Precedence.html#Contextual%20Precedence">Context-Dependent Precedence</a>.
+
+<br><dt><code>%pure_parser</code>
+<dd>Bison declaration to request a pure (reentrant) parser. 
+See <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>.
+
+<br><dt><code>%right</code>
+<dd>Bison declaration to assign right associativity to token(s). 
+See <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>.
+
+<br><dt><code>%start</code>
+<dd>Bison declaration to specify the start symbol.  See <a href="Start-Decl.html#Start%20Decl">The Start-Symbol</a>.
+
+<br><dt><code>%token</code>
+<dd>Bison declaration to declare token(s) without specifying precedence. 
+See <a href="Token-Decl.html#Token%20Decl">Token Type Names</a>.
+
+<br><dt><code>%type</code>
+<dd>Bison declaration to declare nonterminals.  See <a href="Type-Decl.html#Type%20Decl">Nonterminal Symbols</a>.
+
+<br><dt><code>%union</code>
+<dd>Bison declaration to specify several possible data types for semantic
+values.  See <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>. 
+</dl>
+
+<p>These are the punctuation and delimiters used in Bison input:
+
+<dl>
+<dt><code>%%</code>
+<dd>Delimiter used to separate the grammar rule section from the
+Bison declarations section or the additional C code section. 
+See <a href="Grammar-Layout.html#Grammar%20Layout">The Overall Layout of a Bison Grammar</a>.
+
+<br><dt><code>%{ %}</code>
+<dd>All code listed between <code>%{</code> and <code>%}</code> is copied directly
+to the output file uninterpreted.  Such code forms the "C
+declarations" section of the input file.  See <a href="Grammar-Outline.html#Grammar%20Outline">Outline of a Bison Grammar</a>.
+
+<br><dt><code>/*<small>...</small>*/</code>
+<dd>Comment delimiters, as in C.
+
+<br><dt><code>:</code>
+<dd>Separates a rule's result from its components.  See <a href="Rules.html#Rules">Syntax of Grammar Rules</a>.
+
+<br><dt><code>;</code>
+<dd>Terminates a rule.  See <a href="Rules.html#Rules">Syntax of Grammar Rules</a>.
+
+<br><dt><code>|</code>
+<dd>Separates alternate rules for the same result nonterminal. 
+See <a href="Rules.html#Rules">Syntax of Grammar Rules</a>. 
+</dl>
+
+</body></html>
+

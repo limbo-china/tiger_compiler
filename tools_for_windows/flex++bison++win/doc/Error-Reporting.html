@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Error%20Reporting">Error Reporting</a>,
+Next:<a rel=next href="Action-Features.html#Action%20Features">Action Features</a>,
+Previous:<a rel=previous href="Lexical.html#Lexical">Lexical</a>,
+Up:<a rel=up href="Interface.html#Interface">Interface</a>
+<hr><br>
+
+<h3>The Error Reporting Function <code>yyerror</code></h3>
+
+<p>The Bison parser detects a <dfn>parse error</dfn> or <dfn>syntax error</dfn>
+whenever it reads a token which cannot satisfy any syntax rule.  A
+action in the grammar can also explicitly proclaim an error, using the
+macro <code>YYERROR</code> (see <a href="Action-Features.html#Action%20Features">Special Features for Use in Actions</a>).
+
+<p>The Bison parser expects to report the error by calling an error
+reporting function named <code>yyerror</code>, which you must supply.  It is
+called by <code>yyparse</code> whenever a syntax error is found, and it
+receives one argument.  For a parse error, the string is normally
+<code>"parse&nbsp;error"</code>.
+
+<p>If you define the macro <code>YYERROR_VERBOSE</code> in the Bison declarations
+section (see <a href="Bison-Declarations.html#Bison%20Declarations">The Bison Declarations Section</a>), then Bison provides a more verbose
+and specific error message string instead of just plain <code>"parse&nbsp;error"</code>.  It doesn't matter what definition you use for
+<code>YYERROR_VERBOSE</code>, just whether you define it.
+
+<p>The parser can detect one other kind of error: stack overflow.  This
+happens when the input contains constructions that are very deeply
+nested.  It isn't likely you will encounter this, since the Bison
+parser extends its stack automatically up to a very large limit.  But
+if overflow happens, <code>yyparse</code> calls <code>yyerror</code> in the usual
+fashion, except that the argument string is <code>"parser&nbsp;stack&nbsp;overflow"</code>.
+
+<p>The following definition suffices in simple programs:
+
+<br><pre>yyerror (s)
+     char *s;
+{
+  fprintf (stderr, "%s\n", s);
+}
+</pre>
+
+<p>After <code>yyerror</code> returns to <code>yyparse</code>, the latter will attempt
+error recovery if you have written suitable error recovery grammar rules
+(see <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>).  If recovery is impossible, <code>yyparse</code> will
+immediately return 1.
+
+<p>The variable <code>yynerrs</code> contains the number of syntax errors
+encountered so far.  Normally this variable is global; but if you
+request a pure parser (see <a href="Pure-Decl.html#Pure%20Decl">A Pure (Reentrant) Parser</a>) then it is a local variable
+which only the actions can access.
+
+</body></html>
+

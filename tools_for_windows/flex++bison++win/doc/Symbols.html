@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Symbols">Symbols</a>,
+Next:<a rel=next href="Rules.html#Rules">Rules</a>,
+Previous:<a rel=previous href="Grammar-Outline.html#Grammar%20Outline">Grammar Outline</a>,
+Up:<a rel=up href="Grammar-File.html#Grammar%20File">Grammar File</a>
+<hr><br>
+
+<h3>Symbols, Terminal and Nonterminal</h3>
+
+<p><dfn>Symbols</dfn> in Bison grammars represent the grammatical classifications
+of the language.
+
+<p>A <dfn>terminal symbol</dfn> (also known as a <dfn>token type</dfn>) represents a
+class of syntactically equivalent tokens.  You use the symbol in grammar
+rules to mean that a token in that class is allowed.  The symbol is
+represented in the Bison parser by a numeric code, and the <code>yylex</code>
+function returns a token type code to indicate what kind of token has been
+read.  You don't need to know what the code value is; you can use the
+symbol to stand for it.
+
+<p>A <dfn>nonterminal symbol</dfn> stands for a class of syntactically equivalent
+groupings.  The symbol name is used in writing grammar rules.  By convention,
+it should be all lower case.
+
+<p>Symbol names can contain letters, digits (not at the beginning),
+underscores and periods.  Periods make sense only in nonterminals.
+
+<p>There are two ways of writing terminal symbols in the grammar:
+
+<ul>
+<li>A <dfn>named token type</dfn> is written with an identifier, like an
+identifier in C.  By convention, it should be all upper case.  Each
+such name must be defined with a Bison declaration such as
+<code>%token</code>.  See <a href="Token-Decl.html#Token%20Decl">Token Type Names</a>.
+
+<li>A <dfn>character token type</dfn> (or <dfn>literal token</dfn>) is written in
+the grammar using the same syntax used in C for character constants;
+for example, <code>'+'</code> is a character token type.  A character token
+type doesn't need to be declared unless you need to specify its
+semantic value data type (see <a href="Value-Type.html#Value%20Type">Data Types of Semantic Values</a>), associativity, or
+precedence (see <a href="Precedence.html#Precedence">Operator Precedence</a>).
+
+<p>By convention, a character token type is used only to represent a
+token that consists of that particular character.  Thus, the token
+type <code>'+'</code> is used to represent the character <code>+</code> as a
+token.  Nothing enforces this convention, but if you depart from it,
+your program will confuse other readers.
+
+<p>All the usual escape sequences used in character literals in C can be
+used in Bison as well, but you must not use the null character as a
+character literal because its ASCII code, zero, is the code
+<code>yylex</code> returns for end-of-input (see <a href="Calling-Convention.html#Calling%20Convention">Calling Convention for <code>yylex</code></a>). 
+</ul>
+
+<p>How you choose to write a terminal symbol has no effect on its
+grammatical meaning.  That depends only on where it appears in rules and
+on when the parser function returns that symbol.
+
+<p>The value returned by <code>yylex</code> is always one of the terminal symbols
+(or 0 for end-of-input).  Whichever way you write the token type in the
+grammar rules, you write it the same way in the definition of <code>yylex</code>. 
+The numeric code for a character token type is simply the ASCII code for
+the character, so <code>yylex</code> can use the identical character constant to
+generate the requisite code.  Each named token type becomes a C macro in
+the parser file, so <code>yylex</code> can use the name to stand for the code. 
+(This is why periods don't make sense in terminal symbols.) 
+See <a href="Calling-Convention.html#Calling%20Convention">Calling Convention for <code>yylex</code></a>.
+
+<p>If <code>yylex</code> is defined in a separate file, you need to arrange for the
+token-type macro definitions to be available there.  Use the <code>-d</code>
+option when you run Bison, so that it will write these macro definitions
+into a separate header file <code><var>name</var>.tab.h</code> which you can include
+in the other source files that need it.  See <a href="Invocation.html#Invocation">Invoking Bison</a>.
+
+<p>The symbol <code>error</code> is a terminal symbol reserved for error recovery
+(see <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>); you shouldn't use it for any other purpose. 
+In particular, <code>yylex</code> should never return this value.
+
+</body></html>
+

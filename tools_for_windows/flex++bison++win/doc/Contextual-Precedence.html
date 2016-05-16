@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Contextual%20Precedence">Contextual Precedence</a>,
+Next:<a rel=next href="Parser-States.html#Parser%20States">Parser States</a>,
+Previous:<a rel=previous href="Precedence.html#Precedence">Precedence</a>,
+Up:<a rel=up href="Algorithm.html#Algorithm">Algorithm</a>
+<hr><br>
+
+<h3>Context-Dependent Precedence</h3>
+
+<p>Often the precedence of an operator depends on the context.  This sounds
+outlandish at first, but it is really very common.  For example, a minus
+sign typically has a very high precedence as a unary operator, and a
+somewhat lower precedence (lower than multiplication) as a binary operator.
+
+<p>The Bison precedence declarations, <code>%left</code>, <code>%right</code> and
+<code>%nonassoc</code>, can only be used once for a given token; so a token has
+only one precedence declared in this way.  For context-dependent
+precedence, you need to use an additional mechanism: the <code>%prec</code>
+modifier for rules.
+
+<p>The <code>%prec</code> modifier declares the precedence of a particular rule by
+specifying a terminal symbol whose precedence should be used for that rule. 
+It's not necessary for that symbol to appear otherwise in the rule.  The
+modifier's syntax is:
+
+<br><pre>%prec <var>terminal-symbol</var>
+</pre>
+
+<p>and it is written after the components of the rule.  Its effect is to
+assign the rule the precedence of <var>terminal-symbol</var>, overriding
+the precedence that would be deduced for it in the ordinary way.  The
+altered rule precedence then affects how conflicts involving that rule
+are resolved (see <a href="Precedence.html#Precedence">Operator Precedence</a>).
+
+<p>Here is how <code>%prec</code> solves the problem of unary minus.  First, declare
+a precedence for a fictitious terminal symbol named <code>UMINUS</code>.  There
+are no tokens of this type, but the symbol serves to stand for its
+precedence:
+
+<br><pre><small>...</small>
+%left '+' '-'
+%left '*'
+%left UMINUS
+</pre>
+
+<p>Now the precedence of <code>UMINUS</code> can be used in specific rules:
+
+<br><pre>exp:    <small>...</small>
+        | exp '-' exp
+        <small>...</small>
+        | '-' exp %prec UMINUS
+</pre>
+
+</body></html>
+

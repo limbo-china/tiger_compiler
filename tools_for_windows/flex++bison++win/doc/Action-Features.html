@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Action%20Features">Action Features</a>,
+Previous:<a rel=previous href="Error-Reporting.html#Error%20Reporting">Error Reporting</a>,
+Up:<a rel=up href="Interface.html#Interface">Interface</a>
+<hr><br>
+
+<h3>Special Features for Use in Actions</h3>
+
+<p>Here is a table of Bison constructs, variables and macros that
+are useful in actions.
+
+<dl>
+<dt><code>$$</code>
+<dd>Acts like a variable that contains the semantic value for the
+grouping made by the current rule.  See <a href="Actions.html#Actions">Actions</a>.
+
+<br><dt><code>$<var>n</var></code>
+<dd>Acts like a variable that contains the semantic value for the
+<var>n</var>th component of the current rule.  See <a href="Actions.html#Actions">Actions</a>.
+
+<br><dt><code>$&lt;<var>typealt</var>&gt;$</code>
+<dd>Like <code>$$</code> but specifies alternative <var>typealt</var> in the union
+specified by the <code>%union</code> declaration.  See <a href="Action-Types.html#Action%20Types">Data Types of Values in Actions</a>.
+
+<br><dt><code>$&lt;<var>typealt</var>&gt;<var>n</var></code>
+<dd>Like <code>$<var>n</var></code> but specifies alternative <var>typealt</var> in the
+union specified by the <code>%union</code> declaration. 
+See <a href="Action-Types.html#Action%20Types">Data Types of Values in Actions</a>.
+
+<br><dt><code>YYABORT;</code>
+<dd>Return immediately from <code>yyparse</code>, indicating failure. 
+See <a href="Parser-Function.html#Parser%20Function">The Parser Function <code>yyparse</code></a>.
+
+<br><dt><code>YYACCEPT;</code>
+<dd>Return immediately from <code>yyparse</code>, indicating success. 
+See <a href="Parser-Function.html#Parser%20Function">The Parser Function <code>yyparse</code></a>.
+
+<br><dt><code>YYBACKUP (<var>token</var>, <var>value</var>);</code>
+<dd>Unshift a token.  This macro is allowed only for rules that reduce
+a single value, and only when there is no look-ahead token. 
+It installs a look-ahead token with token type <var>token</var> and
+semantic value <var>value</var>; then it discards the value that was
+going to be reduced by this rule.
+
+<p>If the macro is used when it is not valid, such as when there is
+a look-ahead token already, then it reports a syntax error with
+a message <code>cannot back up</code> and performs ordinary error
+recovery.
+
+<p>In either case, the rest of the action is not executed.
+
+<br><dt><code>YYEMPTY</code>
+<dd>Value stored in <code>yychar</code> when there is no look-ahead token.
+
+<br><dt><code>YYERROR;</code>
+<dd>Cause an immediate syntax error.  This statement initiates error
+recovery just as if the parser itself had detected an error; however, it
+does not call <code>yyerror</code>, and does not print any message.  If you
+want to print an error message, call <code>yyerror</code> explicitly before
+the <code>YYERROR;</code> statement.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>YYRECOVERING</code>
+<dd>This macro stands for an expression that has the value 1 when the parser
+is recovering from a syntax error, and 0 the rest of the time. 
+See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>yychar</code>
+<dd>Variable containing the current look-ahead token.  (In a pure parser,
+this is actually a local variable within <code>yyparse</code>.)  When there is
+no look-ahead token, the value <code>YYEMPTY</code> is stored in the variable. 
+See <a href="Look-Ahead.html#Look-Ahead">Look-Ahead Tokens</a>.
+
+<br><dt><code>yyclearin;</code>
+<dd>Discard the current look-ahead token.  This is useful primarily in
+error rules.  See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>yyerrok;</code>
+<dd>Resume generating error messages immediately for subsequent syntax
+errors.  This is useful primarily in error rules. 
+See <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>.
+
+<br><dt><code>@<var>n</var></code>
+<dd>Acts like a structure variable containing information on the line
+numbers and column numbers of the <var>n</var>th component of the current
+rule.  The structure has four members, like this:
+
+<br><pre>struct {
+  int first_line, last_line;
+  int first_column, last_column;
+};
+</pre>
+
+<p>Thus, to get the starting line number of the third component, use
+<code>@3.first_line</code>.
+
+<p>In order for the members of this structure to contain valid information,
+you must make <code>yylex</code> supply this information about each token. 
+If you need only certain members, then <code>yylex</code> need only fill in
+those members.
+
+<p>The use of this feature makes the parser noticeably slower. 
+</dl>
+
+</body></html>
+

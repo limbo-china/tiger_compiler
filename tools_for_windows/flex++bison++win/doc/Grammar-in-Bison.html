@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Grammar%20in%20Bison">Grammar in Bison</a>,
+Next:<a rel=next href="Semantic-Values.html#Semantic%20Values">Semantic Values</a>,
+Previous:<a rel=previous href="Language-and-Grammar.html#Language%20and%20Grammar">Language and Grammar</a>,
+Up:<a rel=up href="Concepts.html#Concepts">Concepts</a>
+<hr><br>
+
+<h3>From Formal Rules to Bison Input</h3>
+
+<p>A formal grammar is a mathematical construct.  To define the language
+for Bison, you must write a file expressing the grammar in Bison syntax:
+a <dfn>Bison grammar</dfn> file.  See <a href="Grammar-File.html#Grammar%20File">Bison Grammar Files</a>.
+
+<p>A nonterminal symbol in the formal grammar is represented in Bison input
+as an identifier, like an identifier in C.  By convention, it should be
+in lower case, such as <code>expr</code>, <code>stmt</code> or <code>declaration</code>.
+
+<p>The Bison representation for a terminal symbol is also called a <dfn>token
+type</dfn>.  Token types as well can be represented as C-like identifiers.  By
+convention, these identifiers should be upper case to distinguish them from
+nonterminals: for example, <code>INTEGER</code>, <code>IDENTIFIER</code>, <code>IF</code> or
+<code>RETURN</code>.  A terminal symbol that stands for a particular keyword in
+the language should be named after that keyword converted to upper case. 
+The terminal symbol <code>error</code> is reserved for error recovery. 
+See <a href="Symbols.html#Symbols">Symbols</a>.
+
+<p>A terminal symbol can also be represented as a character literal, just like
+a C character constant.  You should do this whenever a token is just a
+single character (parenthesis, plus-sign, etc.): use that same character in
+a literal as the terminal symbol for that token.
+
+<p>The grammar rules also have an expression in Bison syntax.  For example,
+here is the Bison rule for a C <code>return</code> statement.  The semicolon in
+quotes is a literal character token, representing part of the C syntax for
+the statement; the naked semicolon, and the colon, are Bison punctuation
+used in every rule.
+
+<br><pre>stmt:   RETURN expr ';'
+        ;
+</pre>
+
+<p>See <a href="Rules.html#Rules">Syntax of Grammar Rules</a>.
+
+</body></html>
+

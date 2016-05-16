@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Gen">Rpcalc Gen</a>,
+Next:<a rel=next href="Rpcalc-Compile.html#Rpcalc%20Compile">Rpcalc Compile</a>,
+Previous:<a rel=previous href="Rpcalc-Error.html#Rpcalc%20Error">Rpcalc Error</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>Running Bison to Make the Parser</h4>
+
+<p>Before running Bison to produce a parser, we need to decide how to arrange
+all the source code in one or more source files.  For such a simple example,
+the easiest thing is to put everything in one file.  The definitions of
+<code>yylex</code>, <code>yyerror</code> and <code>main</code> go at the end, in the
+"additional C code" section of the file (see <a href="Grammar-Layout.html#Grammar%20Layout">The Overall Layout of a Bison Grammar</a>).
+
+<p>For a large project, you would probably have several source files, and use
+<code>make</code> to arrange to recompile them.
+
+<p>With all the source in a single file, you use the following command to
+convert it into a parser file:
+
+<br><pre>bison <var>file_name</var>.y
+</pre>
+
+<p>In this example the file was called <code>rpcalc.y</code> (for "Reverse Polish
+CALCulator").  Bison produces a file named <code><var>file_name</var>.tab.c</code>,
+removing the <code>.y</code> from the original file name. The file output by
+Bison contains the source code for <code>yyparse</code>.  The additional
+functions in the input file (<code>yylex</code>, <code>yyerror</code> and <code>main</code>)
+are copied verbatim to the output.
+
+</body></html>
+

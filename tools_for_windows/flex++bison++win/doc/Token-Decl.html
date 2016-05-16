@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Token%20Decl">Token Decl</a>,
+Next:<a rel=next href="Precedence-Decl.html#Precedence%20Decl">Precedence Decl</a>,
+Up:<a rel=up href="Declarations.html#Declarations">Declarations</a>
+<hr><br>
+
+<h4>Token Type Names</h4>
+
+<p>The basic way to declare a token type name (terminal symbol) is as follows:
+
+<br><pre>%token <var>name</var>
+</pre>
+
+<p>Bison will convert this into a <code>#define</code> directive in
+the parser, so that the function <code>yylex</code> (if it is in this file)
+can use the name <var>name</var> to stand for this token type's code.
+
+<p>Alternatively, you can use <code>%left</code>, <code>%right</code>, or <code>%nonassoc</code>
+instead of <code>%token</code>, if you wish to specify precedence. 
+See <a href="Precedence-Decl.html#Precedence%20Decl">Operator Precedence</a>.
+
+<p>You can explicitly specify the numeric code for a token type by appending
+an integer value in the field immediately following the token name:
+
+<br><pre>%token NUM 300
+</pre>
+
+<p>It is generally best, however, to let Bison choose the numeric codes for
+all token types.  Bison will automatically select codes that don't conflict
+with each other or with ASCII characters.
+
+<p>In the event that the stack type is a union, you must augment the
+<code>%token</code> or other token declaration to include the data type
+alternative delimited by angle-brackets (see <a href="Multiple-Types.html#Multiple%20Types">More Than One Value Type</a>).
+
+<p>For example:
+
+<br><pre>%union {              /* define stack type */
+  double val;
+  symrec *tptr;
+}
+%token &lt;val&gt; NUM      /* define token NUM and its type */
+</pre>
+
+</body></html>
+

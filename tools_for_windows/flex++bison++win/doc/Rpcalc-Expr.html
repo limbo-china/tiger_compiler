@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Expr">Rpcalc Expr</a>,
+Previous:<a rel=previous href="Rpcalc-Line.html#Rpcalc%20Line">Rpcalc Line</a>,
+Up:<a rel=up href="Rpcalc-Rules.html#Rpcalc%20Rules">Rpcalc Rules</a>
+<hr><br>
+
+<h5>Explanation of <code>expr</code></h5>
+
+<p>The <code>exp</code> grouping has several rules, one for each kind of expression. 
+The first rule handles the simplest expressions: those that are just numbers. 
+The second handles an addition-expression, which looks like two expressions
+followed by a plus-sign.  The third handles subtraction, and so on.
+
+<br><pre>exp:      NUM
+        | exp exp '+'     { $$ = $1 + $2;    }
+        | exp exp '-'     { $$ = $1 - $2;    }
+        <small>...</small>
+        ;
+</pre>
+
+<p>We have used <code>|</code> to join all the rules for <code>exp</code>, but we could
+equally well have written them separately:
+
+<br><pre>exp:      NUM ;
+exp:      exp exp '+'     { $$ = $1 + $2;    } ;
+exp:      exp exp '-'     { $$ = $1 - $2;    } ;
+        <small>...</small>
+</pre>
+
+<p>Most of the rules have actions that compute the value of the expression in
+terms of the value of its parts.  For example, in the rule for addition,
+<code>$1</code> refers to the first component <code>exp</code> and <code>$2</code> refers to
+the second one.  The third component, <code>'+'</code>, has no meaningful
+associated semantic value, but if it had one you could refer to it as
+<code>$3</code>.  When <code>yyparse</code> recognizes a sum expression using this
+rule, the sum of the two subexpressions' values is produced as the value of
+the entire expression.  See <a href="Actions.html#Actions">Actions</a>.
+
+<p>You don't have to give an action for every rule.  When a rule has no
+action, Bison by default copies the value of <code>$1</code> into <code>$$</code>. 
+This is what happens in the first rule (the one that uses <code>NUM</code>).
+
+<p>The formatting shown here is the recommended convention, but Bison does
+not require it.  You can add or change whitespace as much as you wish. 
+For example, this:
+
+<br><pre>exp   : NUM | exp exp '+' {$$ = $1 + $2; } | <small>...</small>
+</pre>
+
+<p>means the same thing as this:
+
+<br><pre>exp:      NUM
+        | exp exp '+'    { $$ = $1 + $2; }
+        | <small>...</small>
+</pre>
+
+<p>The latter, however, is much more readable.
+
+</body></html>
+

@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Semantics">Semantics</a>,
+Next:<a rel=next href="Declarations.html#Declarations">Declarations</a>,
+Previous:<a rel=previous href="Recursion.html#Recursion">Recursion</a>,
+Up:<a rel=up href="Grammar-File.html#Grammar%20File">Grammar File</a>
+<hr><br>
+
+<h3>Defining Language Semantics</h3>
+
+<p>The grammar rules for a language determine only the syntax.  The semantics
+are determined by the semantic values associated with various tokens and
+groupings, and by the actions taken when various groupings are recognized.
+
+<p>For example, the calculator calculates properly because the value
+associated with each expression is the proper number; it adds properly
+because the action for the grouping <code><var>x</var>&nbsp;+&nbsp;<var>y</var></code> is to add
+the numbers associated with <var>x</var> and <var>y</var>.
+
+<ul>
+<li><a href="Value-Type.html#Value%20Type">Value Type</a>:         Specifying one data type for all semantic values. 
+<li><a href="Multiple-Types.html#Multiple%20Types">Multiple Types</a>:     Specifying several alternative data types. 
+<li><a href="Actions.html#Actions">Actions</a>:            An action is the semantic definition of a grammar rule. 
+<li><a href="Action-Types.html#Action%20Types">Action Types</a>:       Specifying data types for actions to operate on. 
+<li><a href="Mid-Rule-Actions.html#Mid-Rule%20Actions">Mid-Rule Actions</a>:   Most actions go at the end of a rule. 
+                      This says when, why and how to use the exceptional
+                        action in the middle of a rule. 
+</ul>
+
+</body></html>
+

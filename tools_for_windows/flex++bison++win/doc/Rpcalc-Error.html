@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Error">Rpcalc Error</a>,
+Next:<a rel=next href="Rpcalc-Gen.html#Rpcalc%20Gen">Rpcalc Gen</a>,
+Previous:<a rel=previous href="Rpcalc-Main.html#Rpcalc%20Main">Rpcalc Main</a>,
+Up:<a rel=up href="RPN-Calc.html#RPN%20Calc">RPN Calc</a>
+<hr><br>
+
+<h4>The Error Reporting Routine</h4>
+
+<p>When <code>yyparse</code> detects a syntax error, it calls the error reporting
+function <code>yyerror</code> to print an error message (usually but not always
+<code>"parse error"</code>).  It is up to the programmer to supply <code>yyerror</code>
+(see <a href="Interface.html#Interface">Parser C-Language Interface</a>), so here is the definition we will use:
+
+<br><pre>#include &lt;stdio.h&gt;
+
+yyerror (s)  /* Called by yyparse on error */
+     char *s;
+{
+  printf ("%s\n", s);
+}
+</pre>
+
+<p>After <code>yyerror</code> returns, the Bison parser may recover from the error
+and continue parsing if the grammar contains a suitable error rule
+(see <a href="Error-Recovery.html#Error%20Recovery">Error Recovery</a>).  Otherwise, <code>yyparse</code> returns nonzero.  We
+have not written any error rules in this example, so any invalid input will
+cause the calculator program to exit.  This is not clean behavior for a
+real calculator, but it is adequate in the first example.
+
+</body></html>
+

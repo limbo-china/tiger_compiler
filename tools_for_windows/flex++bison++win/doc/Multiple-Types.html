@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Multiple%20Types">Multiple Types</a>,
+Next:<a rel=next href="Actions.html#Actions">Actions</a>,
+Previous:<a rel=previous href="Value-Type.html#Value%20Type">Value Type</a>,
+Up:<a rel=up href="Semantics.html#Semantics">Semantics</a>
+<hr><br>
+
+<h4>More Than One Value Type</h4>
+
+<p>In most programs, you will need different data types for different kinds
+of tokens and groupings.  For example, a numeric constant may need type
+<code>int</code> or <code>long</code>, while a string constant needs type <code>char *</code>,
+and an identifier might need a pointer to an entry in the symbol table.
+
+<p>To use more than one data type for semantic values in one parser, Bison
+requires you to do two things:
+
+<ul>
+<li>Specify the entire collection of possible data types, with the
+<code>%union</code> Bison declaration (see <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>).
+
+<li>Choose one of those types for each symbol (terminal or nonterminal)
+for which semantic values are used.  This is done for tokens with the
+<code>%token</code> Bison declaration (see <a href="Token-Decl.html#Token%20Decl">Token Type Names</a>) and for groupings
+with the <code>%type</code> Bison declaration (see <a href="Type-Decl.html#Type%20Decl">Nonterminal Symbols</a>). 
+</ul>
+
+</body></html>
+

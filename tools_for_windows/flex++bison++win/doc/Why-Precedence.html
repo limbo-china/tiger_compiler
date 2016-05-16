@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Why%20Precedence">Why Precedence</a>,
+Next:<a rel=next href="Using-Precedence.html#Using%20Precedence">Using Precedence</a>,
+Up:<a rel=up href="Precedence.html#Precedence">Precedence</a>
+<hr><br>
+
+<h4>When Precedence is Needed</h4>
+
+<p>Consider the following ambiguous grammar fragment (ambiguous because the
+input <code>1&nbsp;-&nbsp;2&nbsp;*&nbsp;3</code> can be parsed in two different ways):
+
+<br><pre>expr:     expr '-' expr
+        | expr '*' expr
+        | expr '&lt;' expr
+        | '(' expr ')'
+        <small>...</small>
+        ;
+</pre>
+
+<p>Suppose the parser has seen the tokens <code>1</code>, <code>-</code> and <code>2</code>;
+should it reduce them via the rule for the addition operator?  It depends
+on the next token.  Of course, if the next token is <code>)</code>, we must
+reduce; shifting is invalid because no single rule can reduce the token
+sequence <code>-&nbsp;2&nbsp;)</code> or anything starting with that.  But if the next
+token is <code>*</code> or <code>&lt;</code>, we have a choice: either shifting or
+reduction would allow the parse to complete, but with different
+results.
+
+<p>To decide which one Bison should do, we must consider the
+results.  If the next operator token <var>op</var> is shifted, then it
+must be reduced first in order to permit another opportunity to
+reduce the sum.  The result is (in effect) <code>1&nbsp;-&nbsp;(2&nbsp;<var>op</var>&nbsp;3)</code>.  On the other hand, if the subtraction is reduced
+before shifting <var>op</var>, the result is <code>(1&nbsp;-&nbsp;2)&nbsp;<var>op</var>&nbsp;3</code>.  Clearly, then, the choice of shift or reduce should depend
+on the relative precedence of the operators <code>-</code> and
+<var>op</var>: <code>*</code> should be shifted first, but not <code>&lt;</code>.
+
+<p>What about input such as <code>1&nbsp;-&nbsp;2&nbsp;-&nbsp;5</code>; should this be
+<code>(1&nbsp;-&nbsp;2)&nbsp;-&nbsp;5</code> or should it be <code>1&nbsp;-&nbsp;(2&nbsp;-&nbsp;5)</code>?  For
+most operators we prefer the former, which is called <dfn>left
+association</dfn>.  The latter alternative, <dfn>right association</dfn>, is
+desirable for assignment operators.  The choice of left or right
+association is a matter of whether the parser chooses to shift or
+reduce when the stack contains <code>1&nbsp;-&nbsp;2</code> and the look-ahead
+token is <code>-</code>: shifting makes right-associativity.
+
+</body></html>
+

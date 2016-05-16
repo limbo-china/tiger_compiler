@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Token%20Values">Token Values</a>,
+Next:<a rel=next href="Token-Positions.html#Token%20Positions">Token Positions</a>,
+Previous:<a rel=previous href="Calling-Convention.html#Calling%20Convention">Calling Convention</a>,
+Up:<a rel=up href="Lexical.html#Lexical">Lexical</a>
+<hr><br>
+
+<h4>Semantic Values of Tokens</h4>
+
+<p>In an ordinary (nonreentrant) parser, the semantic value of the token must
+be stored into the global variable <code>yylval</code>.  When you are using
+just one data type for semantic values, <code>yylval</code> has that type. 
+Thus, if the type is <code>int</code> (the default), you might write this in
+<code>yylex</code>:
+
+<br><pre>  <small>...</small>
+  yylval = value;  /* Put value onto Bison stack. */
+  return INT;      /* Return the type of the token. */
+  <small>...</small>
+</pre>
+
+<p>When you are using multiple data types, <code>yylval</code>'s type is a union
+made from the <code>%union</code> declaration (see <a href="Union-Decl.html#Union%20Decl">The Collection of Value Types</a>).  So when
+you store a token's value, you must use the proper member of the union. 
+If the <code>%union</code> declaration looks like this:
+
+<br><pre>%union {
+  int intval;
+  double val;
+  symrec *tptr;
+}
+</pre>
+
+<p>then the code in <code>yylex</code> might look like this:
+
+<br><pre>  <small>...</small>
+  yylval.intval = value; /* Put value onto Bison stack. */
+  return INT;          /* Return the type of the token. */
+  <small>...</small>
+</pre>
+
+</body></html>
+

@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rpcalc%20Input">Rpcalc Input</a>,
+Next:<a rel=next href="Rpcalc-Line.html#Rpcalc%20Line">Rpcalc Line</a>,
+Up:<a rel=up href="Rpcalc-Rules.html#Rpcalc%20Rules">Rpcalc Rules</a>
+<hr><br>
+
+<h5>Explanation of <code>input</code></h5>
+
+<p>Consider the definition of <code>input</code>:
+
+<br><pre>input:    /* empty */
+        | input line
+;
+</pre>
+
+<p>This definition reads as follows: "A complete input is either an empty
+string, or a complete input followed by an input line".  Notice that
+"complete input" is defined in terms of itself.  This definition is said
+to be <dfn>left recursive</dfn> since <code>input</code> appears always as the
+leftmost symbol in the sequence.  See <a href="Recursion.html#Recursion">Recursive Rules</a>.
+
+<p>The first alternative is empty because there are no symbols between the
+colon and the first <code>|</code>; this means that <code>input</code> can match an
+empty string of input (no tokens).  We write the rules this way because it
+is legitimate to type <kbd>Ctrl-d</kbd> right after you start the calculator. 
+It's conventional to put an empty alternative first and write the comment
+<code>/* empty */</code> in it.
+
+<p>The second alternate rule (<code>input line</code>) handles all nontrivial input. 
+It means, "After reading any number of lines, read one more line if
+possible."  The left recursion makes this rule into a loop.  Since the
+first alternative matches empty input, the loop can be executed zero or
+more times.
+
+<p>The parser function <code>yyparse</code> continues to process input until a
+grammatical error is seen or the lexical analyzer says there are no more
+input tokens; we will arrange for the latter to happen at end of file.
+
+</body></html>
+

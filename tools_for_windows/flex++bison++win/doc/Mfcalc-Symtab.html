@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Mfcalc%20Symtab">Mfcalc Symtab</a>,
+Previous:<a rel=previous href="Mfcalc-Rules.html#Mfcalc%20Rules">Mfcalc Rules</a>,
+Up:<a rel=up href="Multi-function-Calc.html#Multi-function%20Calc">Multi-function Calc</a>
+<hr><br>
+
+<h4>The <code>mfcalc</code> Symbol Table</h4>
+
+<p>The multi-function calculator requires a symbol table to keep track of the
+names and meanings of variables and functions.  This doesn't affect the
+grammar rules (except for the actions) or the Bison declarations, but it
+requires some additional C functions for support.
+
+<p>The symbol table itself consists of a linked list of records.  Its
+definition, which is kept in the header <code>calc.h</code>, is as follows.  It
+provides for either functions or variables to be placed in the table.
+
+<br><pre>/* Data type for links in the chain of symbols.      */
+struct symrec
+{
+  char *name;  /* name of symbol                     */
+  int type;    /* type of symbol: either VAR or FNCT */
+  union {
+    double var;           /* value of a VAR          */
+    double (*fnctptr)();  /* value of a FNCT         */
+  } value;
+  struct symrec *next;    /* link field              */
+};
+
+typedef struct symrec symrec;
+
+/* The symbol table: a chain of `struct symrec'.     */
+extern symrec *sym_table;
+
+symrec *putsym ();
+symrec *getsym ();
+</pre>
+
+<p>The new version of <code>main</code> includes a call to <code>init_table</code>, a
+function that initializes the symbol table.  Here it is, and
+<code>init_table</code> as well:
+
+<br><pre>#include &lt;stdio.h&gt;
+
+main ()
+{
+  init_table ();
+  yyparse ();
+}
+
+yyerror (s)  /* Called by yyparse on error */
+     char *s;
+{
+  printf ("%s\n", s);
+}
+
+struct init
+{
+  char *fname;
+  double (*fnct)();
+};
+
+struct init arith_fncts[]
+  = {
+      "sin", sin,
+      "cos", cos,
+      "atan", atan,
+      "ln", log,
+      "exp", exp,
+      "sqrt", sqrt,
+      0, 0
+    };
+
+/* The symbol table: a chain of `struct symrec'.  */
+symrec *sym_table = (symrec *)0;
+
+init_table ()  /* puts arithmetic functions in table. */
+{
+  int i;
+  symrec *ptr;
+  for (i = 0; arith_fncts[i].fname != 0; i++)
+    {
+      ptr = putsym (arith_fncts[i].fname, FNCT);
+      ptr-&gt;value.fnctptr = arith_fncts[i].fnct;
+    }
+}
+</pre>
+
+<p>By simply editing the initialization list and adding the necessary include
+files, you can add additional functions to the calculator.
+
+<p>Two important functions allow look-up and installation of symbols in the
+symbol table.  The function <code>putsym</code> is passed a name and the type
+(<code>VAR</code> or <code>FNCT</code>) of the object to be installed.  The object is
+linked to the front of the list, and a pointer to the object is returned. 
+The function <code>getsym</code> is passed the name of the symbol to look up.  If
+found, a pointer to that symbol is returned; otherwise zero is returned.
+
+<br><pre>symrec *
+putsym (sym_name,sym_type)
+     char *sym_name;
+     int sym_type;
+{
+  symrec *ptr;
+  ptr = (symrec *) malloc (sizeof (symrec));
+  ptr-&gt;name = (char *) malloc (strlen (sym_name) + 1);
+  strcpy (ptr-&gt;name,sym_name);
+  ptr-&gt;type = sym_type;
+  ptr-&gt;value.var = 0; /* set value to 0 even if fctn.  */
+  ptr-&gt;next = (struct symrec *)sym_table;
+  sym_table = ptr;
+  return ptr;
+}
+
+symrec *
+getsym (sym_name)
+     char *sym_name;
+{
+  symrec *ptr;
+  for (ptr = sym_table; ptr != (symrec *) 0;
+       ptr = (symrec *)ptr-&gt;next)
+    if (strcmp (ptr-&gt;name,sym_name) == 0)
+      return ptr;
+  return 0;
+}
+</pre>
+
+<p>The function <code>yylex</code> must now recognize variables, numeric values, and
+the single-character arithmetic operators.  Strings of alphanumeric
+characters with a leading nondigit are recognized as either variables or
+functions depending on what the symbol table says about them.
+
+<p>The string is passed to <code>getsym</code> for look up in the symbol table.  If
+the name appears in the table, a pointer to its location and its type
+(<code>VAR</code> or <code>FNCT</code>) is returned to <code>yyparse</code>.  If it is not
+already in the table, then it is installed as a <code>VAR</code> using
+<code>putsym</code>.  Again, a pointer and its type (which must be <code>VAR</code>) is
+returned to <code>yyparse</code>.
+
+<p>No change is needed in the handling of numeric values and arithmetic
+operators in <code>yylex</code>.
+
+<br><pre>#include &lt;ctype.h&gt;
+yylex ()
+{
+  int c;
+
+  /* Ignore whitespace, get first nonwhite character.  */
+  while ((c = getchar ()) == ' ' || c == '\t');
+
+  if (c == EOF)
+    return 0;
+
+  /* Char starts a number =&gt; parse the number.         */
+  if (c == '.' || isdigit (c))
+    {
+      ungetc (c, stdin);
+      scanf ("%lf", &amp;yylval.val);
+      return NUM;
+    }
+
+  /* Char starts an identifier =&gt; read the name.       */
+  if (isalpha (c))
+    {
+      symrec *s;
+      static char *symbuf = 0;
+      static int length = 0;
+      int i;
+
+      /* Initially make the buffer long enough
+         for a 40-character symbol name.  */
+      if (length == 0)
+        length = 40, symbuf = (char *)malloc (length + 1);
+
+      i = 0;
+      do
+        {
+          /* If buffer is full, make it bigger.        */
+          if (i == length)
+            {
+              length *= 2;
+              symbuf = (char *)realloc (symbuf, length + 1);
+            }
+          /* Add this character to the buffer.         */
+          symbuf[i++] = c;
+          /* Get another character.                    */
+          c = getchar ();
+        }
+      while (c != EOF &amp;&amp; isalnum (c));
+
+      ungetc (c, stdin);
+      symbuf[i] = '\0';
+
+      s = getsym (symbuf);
+      if (s == 0)
+        s = putsym (symbuf, VAR);
+      yylval.tptr = s;
+      return s-&gt;type;
+    }
+
+  /* Any other character is a token by itself.        */
+  return c;
+}
+</pre>
+
+<p>This program is both powerful and flexible. You may easily add new
+functions, and it is a simple job to modify this code to install predefined
+variables such as <code>pi</code> or <code>e</code> as well.
+
+</body></html>
+

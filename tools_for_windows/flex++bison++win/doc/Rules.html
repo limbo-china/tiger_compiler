@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Rules">Rules</a>,
+Next:<a rel=next href="Recursion.html#Recursion">Recursion</a>,
+Previous:<a rel=previous href="Symbols.html#Symbols">Symbols</a>,
+Up:<a rel=up href="Grammar-File.html#Grammar%20File">Grammar File</a>
+<hr><br>
+
+<h3>Syntax of Grammar Rules</h3>
+
+<p>A Bison grammar rule has the following general form:
+
+<br><pre><var>result</var>: <var>components</var><small>...</small>
+        ;
+</pre>
+
+<p>where <var>result</var> is the nonterminal symbol that this rule describes
+and <var>components</var> are various terminal and nonterminal symbols that
+are put together by this rule (see <a href="Symbols.html#Symbols">Symbols</a>).
+
+<p>For example,
+
+<br><pre>exp:      exp '+' exp
+        ;
+</pre>
+
+<p>says that two groupings of type <code>exp</code>, with a <code>+</code> token in between,
+can be combined into a larger grouping of type <code>exp</code>.
+
+<p>Whitespace in rules is significant only to separate symbols.  You can add
+extra whitespace as you wish.
+
+<p>Scattered among the components can be <var>actions</var> that determine
+the semantics of the rule.  An action looks like this:
+
+<br><pre>{<var>C statements</var>}
+</pre>
+
+<p>Usually there is only one action and it follows the components. 
+See <a href="Actions.html#Actions">Actions</a>.
+
+<p>Multiple rules for the same <var>result</var> can be written separately or can
+be joined with the vertical-bar character <code>|</code> as follows:
+
+<p>They are still considered distinct rules even when joined in this way.
+
+<p>If <var>components</var> in a rule is empty, it means that <var>result</var> can
+match the empty string.  For example, here is how to define a
+comma-separated sequence of zero or more <code>exp</code> groupings:
+
+<br><pre>expseq:   /* empty */
+        | expseq1
+        ;
+
+expseq1:  exp
+        | expseq1 ',' exp
+        ;
+</pre>
+
+<p>It is customary to write a comment <code>/* empty */</code> in each rule
+with no components.
+
+</body></html>
+

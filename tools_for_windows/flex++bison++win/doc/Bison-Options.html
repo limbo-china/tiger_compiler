@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Bison 1.20</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="Bison 1.20">
+<meta name=generator content="makeinfo 4.1">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Bison%20Options">Bison Options</a>,
+Next:<a rel=next href="Option-Cross-Key.html#Option%20Cross%20Key">Option Cross Key</a>,
+Up:<a rel=up href="Invocation.html#Invocation">Invocation</a>
+<hr><br>
+
+<h3>Bison Options</h3>
+
+<p>Bison supports both traditional single-letter options and mnemonic long
+option names.  Long option names are indicated with <code>--</code> instead of
+<code>-</code>.  Abbreviations for option names are allowed as long as they
+are unique.  When a long option takes an argument, like
+<code>--file-prefix</code>, connect the option name and the argument with
+<code>=</code>.
+
+<p>Here is a list of options that can be used with Bison, alphabetized by
+short option.  It is followed by a cross key alphabetized by long
+option.
+
+<dl>
+<dt><code>-b <var>file-prefix</var></code>
+<dt><code>--file-prefix=<var>prefix</var></code>
+<dd>Specify a prefix to use for all Bison output file names.  The names are
+chosen as if the input file were named <code><var>prefix</var>.c</code>.
+
+<br><dt><code>-d</code>
+<dt><code>--defines</code>
+<dd>Write an extra output file containing macro definitions for the token
+type names defined in the grammar and the semantic value type
+<code>YYSTYPE</code>, as well as a few <code>extern</code> variable declarations.
+
+<p>If the parser output file is named <code><var>name</var>.c</code> then this file
+is named <code><var>name</var>.h</code>.
+
+<p>This output file is essential if you wish to put the definition of
+<code>yylex</code> in a separate source file, because <code>yylex</code> needs to
+be able to refer to token type codes and the variable
+<code>yylval</code>.  See <a href="Token-Values.html#Token%20Values">Semantic Values of Tokens</a>.
+
+<br><dt><code>-l</code>
+<dt><code>--no-lines</code>
+<dd>Don't put any <code>#line</code> preprocessor commands in the parser file. 
+Ordinarily Bison puts them in the parser file so that the C compiler
+and debuggers will associate errors with your source file, the
+grammar file.  This option causes them to associate errors with the
+parser file, treating it an independent source file in its own right.
+
+<br><dt><code>-o <var>outfile</var></code>
+<dt><code>--output-file=<var>outfile</var></code>
+<dd>Specify the name <var>outfile</var> for the parser file.
+
+<p>The other output files' names are constructed from <var>outfile</var>
+as described under the <code>-v</code> and <code>-d</code> switches.
+
+<br><dt><code>-p <var>prefix</var></code>
+<dt><code>--name-prefix=<var>prefix</var></code>
+<dd>Rename the external symbols used in the parser so that they start with
+<var>prefix</var> instead of <code>yy</code>.  The precise list of symbols renamed
+is <code>yyparse</code>, <code>yylex</code>, <code>yyerror</code>, <code>yylval</code>,
+<code>yychar</code> and <code>yydebug</code>.
+
+<p>For example, if you use <code>-p c</code>, the names become <code>cparse</code>,
+<code>clex</code>, and so on.
+
+<p>See <a href="Multiple-Parsers.html#Multiple%20Parsers">Multiple Parsers in the Same Program</a>.
+
+<br><dt><code>-t</code>
+<dt><code>--debug</code>
+<dd>Output a definition of the macro <code>YYDEBUG</code> into the parser file,
+so that the debugging facilities are compiled.  See <a href="Debugging.html#Debugging">Debugging Your Parser</a>.
+
+<br><dt><code>-v</code>
+<dt><code>--verbose</code>
+<dd>Write an extra output file containing verbose descriptions of the
+parser states and what is done for each type of look-ahead token in
+that state.
+
+<p>This file also describes all the conflicts, both those resolved by
+operator precedence and the unresolved ones.
+
+<p>The file's name is made by removing <code>.tab.c</code> or <code>.c</code> from
+the parser output file name, and adding <code>.output</code> instead.
+
+<p>Therefore, if the input file is <code>foo.y</code>, then the parser file is
+called <code>foo.tab.c</code> by default.  As a consequence, the verbose
+output file is called <code>foo.output</code>.
+
+<br><dt><code>-V</code>
+<dt><code>--version</code>
+<dd>Print the version number of Bison and exit.
+
+<br><dt><code>-h</code>
+<dt><code>--help</code>
+<dd>Print a summary of the command-line options to Bison and exit.
+
+<br><dt><code>-y</code>
+<dt><code>--yacc</code>
+<dt><code>--fixed-output-files</code>
+<dd>Equivalent to <code>-o y.tab.c</code>; the parser output file is called
+<code>y.tab.c</code>, and the other outputs are called <code>y.output</code> and
+<code>y.tab.h</code>.  The purpose of this switch is to imitate Yacc's output
+file name conventions.  Thus, the following shell script can substitute
+for Yacc:
+
+<br><pre>bison -y $*
+</pre>
+</dl>
+
+</body></html>
+
