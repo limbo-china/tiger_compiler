@@ -43,6 +43,11 @@ int sym; //单词类别
 int num; //整数数值
 int cp;  //字符串指针
 
+
+int getsym();  //获取单词的函数，即词法分析主要函数
+int searchw(char *); 
+int searchc(char a);
+
 int getsym() {
 	while (ch == 32 || ch == 9 || ch == 10 || ch == 13)  //忽略空白符
 		getchdo;
